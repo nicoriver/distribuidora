@@ -48,8 +48,8 @@ namespace CapaPresentacion
 
                 if (result == DialogResult.OK)
                 {
-                    txtdocumentocliente.Text = modal._Cliente.Documento;
-                    txtnombrecliente.Text = modal._Cliente.NombreCompleto;
+                    txtdocumentocliente.Text = modal._Cliente.Dni;
+                    txtnombrecliente.Text = modal._Cliente.Nombre;
                     txtcodproducto.Select();
                 }
                 else

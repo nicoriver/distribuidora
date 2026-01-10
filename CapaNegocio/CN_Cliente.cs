@@ -23,19 +23,19 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            if (obj.Documento == "")
+            if (string.IsNullOrEmpty(obj.Apellido) || string.IsNullOrWhiteSpace(obj.Apellido))
             {
-                Mensaje += "Es necesario el documento del Cliente\n";
+                Mensaje += "Es necesario el apellido del Cliente\n";
             }
 
-            if (obj.NombreCompleto == "")
+            if (string.IsNullOrEmpty(obj.Nombre) || string.IsNullOrWhiteSpace(obj.Nombre))
             {
-                Mensaje += "Es necesario el nombre completo del Cliente\n";
+                Mensaje += "Es necesario el nombre del Cliente\n";
             }
 
-            if (obj.Correo == "")
+            if (string.IsNullOrEmpty(obj.Dni) || string.IsNullOrWhiteSpace(obj.Dni))
             {
-                Mensaje += "Es necesario el correo del Cliente\n";
+                Mensaje += "Es necesario el DNI del Cliente\n";
             }
 
             if (Mensaje != string.Empty)
@@ -46,30 +46,28 @@ namespace CapaNegocio
             {
                 return objcd_Cliente.Registrar(obj, out Mensaje);
             }
-
-
         }
 
 
         public bool Editar(Cliente obj, out string Mensaje)
         {
-
             Mensaje = string.Empty;
 
-            if (obj.Documento == "")
+            if (string.IsNullOrEmpty(obj.Apellido) || string.IsNullOrWhiteSpace(obj.Apellido))
             {
-                Mensaje += "Es necesario el documento del Cliente\n";
+                Mensaje += "Es necesario el apellido del Cliente\n";
             }
 
-            if (obj.NombreCompleto == "")
+            if (string.IsNullOrEmpty(obj.Nombre) || string.IsNullOrWhiteSpace(obj.Nombre))
             {
-                Mensaje += "Es necesario el nombre completo del Cliente\n";
+                Mensaje += "Es necesario el nombre del Cliente\n";
             }
 
-            if (obj.Correo == "")
+            if (string.IsNullOrEmpty(obj.Dni) || string.IsNullOrWhiteSpace(obj.Dni))
             {
-                Mensaje += "Es necesario el correo del Cliente\n";
+                Mensaje += "Es necesario el DNI del Cliente\n";
             }
+
             if (Mensaje != string.Empty)
             {
                 return false;
@@ -78,8 +76,6 @@ namespace CapaNegocio
             {
                 return objcd_Cliente.Editar(obj, out Mensaje);
             }
-
-
         }
 
 
