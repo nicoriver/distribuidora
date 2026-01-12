@@ -22,14 +22,25 @@ namespace CapaPresentacion
 
         private void frmCategoria_Load(object sender, EventArgs e)
         {
-            cboestado.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Activo" });
-            cboestado.Items.Add(new OpcionCombo() { Valor = 0, Texto = "No Activo" });
-            cboestado.DisplayMember = "Texto";
-            cboestado.ValueMember = "Valor";
-            cboestado.SelectedIndex = 0;
 
+            dgvCategoria.DefaultCellStyle.Font =
+           new Font("Segoe UI", 10);
 
-            foreach (DataGridViewColumn columna in dgvdata.Columns)
+            dgvCategoria.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Segoe UI", 11, FontStyle.Bold);
+
+            dgvCategoria.EnableHeadersVisualStyles = false;
+
+            dgvCategoria.AutoSizeRowsMode =
+                DataGridViewAutoSizeRowsMode.AllCells;
+
+            cmbEstadoC.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Activo" });
+            cmbEstadoC.Items.Add(new OpcionCombo() { Valor = 0, Texto = "No Activo" });
+            cmbEstadoC.DisplayMember = "Texto";
+            cmbEstadoC.ValueMember = "Valor";
+            cmbEstadoC.SelectedIndex = 0;
+
+            foreach (DataGridViewColumn columna in dgvCategoria.Columns)
             {
 
                 if (columna.Visible == true && columna.Name != "btnseleccionar")
@@ -37,9 +48,9 @@ namespace CapaPresentacion
                     cbobusqueda.Items.Add(new OpcionCombo() { Valor = columna.Name, Texto = columna.HeaderText });
                 }
             }
-            cbobusqueda.DisplayMember = "Texto";
-            cbobusqueda.ValueMember = "Valor";
-            cbobusqueda.SelectedIndex = 0;
+            cmbBuscarc.DisplayMember = "Texto";
+            cmbBuscarc.ValueMember = "Valor";
+            //cmbBuscarc.SelectedIndex = 0;
 
 
 
@@ -49,9 +60,8 @@ namespace CapaPresentacion
             foreach (Categoria item in lista)
             {
 
-                dgvdata.Rows.Add(new object[] {"",item.IdCategoria,
-                    item.Descripcion,
-                    item.Estado == true ? 1 : 0 ,
+                dgvCategoria.Rows.Add(new object[] {"",item.IdCategoria,
+                    item.Descripcion,                    
                     item.Estado == true ? "Activo" : "No Activo"
                 });
             }
@@ -65,8 +75,8 @@ namespace CapaPresentacion
             Categoria obj = new Categoria()
             {
                 IdCategoria = Convert.ToInt32(txtid.Text),
-                Descripcion = txtdescripcion.Text,
-                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false
+                Descripcion = txtcategorias.Text,
+                Estado = Convert.ToInt32(((OpcionCombo)cmbEstadoC.SelectedItem).Valor) == 1 ? true : false
             };
 
             if (obj.IdCategoria == 0)
@@ -76,9 +86,9 @@ namespace CapaPresentacion
                 if (idgenerado != 0)
                 {
 
-                    dgvdata.Rows.Add(new object[] {"",idgenerado,txtdescripcion.Text,
-                        ((OpcionCombo)cboestado.SelectedItem).Valor.ToString(),
-                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString()
+                    dgvCategoria.Rows.Add(new object[] {"",idgenerado,txtcategorias.Text,
+                        ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString(),
+                        ((OpcionCombo)cmbEstadoC.SelectedItem).Texto.ToString()
                     });
 
                     Limpiar();
@@ -96,11 +106,11 @@ namespace CapaPresentacion
 
                 if (resultado)
                 {
-                    DataGridViewRow row = dgvdata.Rows[Convert.ToInt32(txtindice.Text)];
+                    DataGridViewRow row = dgvCategoria.Rows[Convert.ToInt32(txtindice.Text)];
                     row.Cells["Id"].Value = txtid.Text;
-                    row.Cells["Descripcion"].Value = txtdescripcion.Text;
-                    row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
-                    row.Cells["Estado"].Value = ((OpcionCombo)cboestado.SelectedItem).Texto.ToString();
+                    row.Cells["Descripcion"].Value = txtcategorias.Text;
+                    row.Cells["EstadoValor"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString();
+                    row.Cells["Estado"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Texto.ToString();
                     Limpiar();
                 }
                 else
@@ -118,13 +128,13 @@ namespace CapaPresentacion
 
             txtindice.Text = "-1";
             txtid.Text = "0";
-            txtdescripcion.Text = "";
-            cboestado.SelectedIndex = 0;
+            txtcategorias.Text = "";
+            cmbEstadoC.SelectedIndex = 0;
 
-            txtdescripcion.Select();
+            txtcategorias.Select();
         }
 
-        private void dgvdata_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void dgvCategoria_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex < 0)
                 return;
@@ -142,30 +152,41 @@ namespace CapaPresentacion
                 e.Graphics.DrawImage(Properties.Resources.check20, new Rectangle(x, y, w, h));
                 e.Handled = true;
             }
+
         }
 
-        private void dgvdata_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dgvCategoria_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvdata.Columns[e.ColumnIndex].Name == "btnseleccionar")
+            if (dgvCategoria.Columns[e.ColumnIndex].Name == "btnseleccionar")
             {
 
                 int indice = e.RowIndex;
 
                 if (indice >= 0)
                 {
+
                     txtindice.Text = indice.ToString();
-                    txtid.Text = dgvdata.Rows[indice].Cells["Id"].Value.ToString();
-                    txtdescripcion.Text = dgvdata.Rows[indice].Cells["Descripcion"].Value.ToString();
+                    txtid.Text = dgvCategoria.Rows[indice].Cells["Id"].Value.ToString();
+                    txtcategorias.Text = dgvCategoria.Rows[indice].Cells["Descripcion"].Value.ToString();
+
+
+
+
                     foreach (OpcionCombo oc in cboestado.Items)
                     {
-                        if (Convert.ToInt32(oc.Valor) == Convert.ToInt32(dgvdata.Rows[indice].Cells["EstadoValor"].Value))
+                        if (Convert.ToInt32(oc.Valor) == Convert.ToInt32(dgvCategoria.Rows[indice].Cells["EstadoValor"].Value))
                         {
                             int indice_combo = cboestado.Items.IndexOf(oc);
                             cboestado.SelectedIndex = indice_combo;
                             break;
                         }
                     }
+
+
                 }
+
+
             }
         }
 
@@ -186,7 +207,7 @@ namespace CapaPresentacion
 
                     if (respuesta)
                     {
-                        dgvdata.Rows.RemoveAt(Convert.ToInt32(txtindice.Text));
+                        dgvCategoria.Rows.RemoveAt(Convert.ToInt32(txtindice.Text));
                         Limpiar();
                     }
                     else
@@ -200,9 +221,9 @@ namespace CapaPresentacion
 
         private void btnbuscar_Click(object sender, EventArgs e)
         {
-            string columnaFiltro = ((OpcionCombo)cbobusqueda.SelectedItem).Valor.ToString();
+            string columnaFiltro = ((OpcionCombo)cmbBuscarc.SelectedItem).Valor.ToString();
 
-            if (dgvdata.Rows.Count > 0)
+            if (dgvCategoria.Rows.Count > 0)
             {
                 foreach (DataGridViewRow row in dgvdata.Rows)
                 {
@@ -218,7 +239,7 @@ namespace CapaPresentacion
         private void btnlimpiarbuscador_Click(object sender, EventArgs e)
         {
             txtbusqueda.Text = "";
-            foreach (DataGridViewRow row in dgvdata.Rows)
+            foreach (DataGridViewRow row in dgvCategoria.Rows)
             {
                 row.Visible = true;
             }
