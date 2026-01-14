@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnbuscar = new FontAwesome.Sharp.IconButton();
             this.dgvdata = new System.Windows.Forms.DataGridView();
             this.btnseleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -53,24 +53,27 @@
             this.cboestado = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvCategoria = new System.Windows.Forms.DataGridView();
-            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.idcategoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CategoriaD = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Estadoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.iconButton1 = new FontAwesome.Sharp.IconButton();
-            this.iconButton2 = new FontAwesome.Sharp.IconButton();
-            this.iconButton3 = new FontAwesome.Sharp.IconButton();
+            this.btnEliminarC = new FontAwesome.Sharp.IconButton();
+            this.btnLimiparC = new FontAwesome.Sharp.IconButton();
+            this.btnGuardarc = new FontAwesome.Sharp.IconButton();
             this.txtcategorias = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.iconButton4 = new FontAwesome.Sharp.IconButton();
-            this.iconButton5 = new FontAwesome.Sharp.IconButton();
+            this.btnlimpiarbuscadorC = new FontAwesome.Sharp.IconButton();
+            this.btnbuscarc = new FontAwesome.Sharp.IconButton();
             this.txtNombrec = new System.Windows.Forms.TextBox();
             this.cmbBuscarc = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbEstadoC = new System.Windows.Forms.ComboBox();
+            this.txtIndicec = new System.Windows.Forms.TextBox();
+            this.txtIdC = new System.Windows.Forms.TextBox();
+            this.btnseleccionarc = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.idcategoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CategoriaD = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Estadoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EstadoValorC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvdata)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCategoria)).BeginInit();
             this.SuspendLayout();
@@ -102,15 +105,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvdata.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(2);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvdata.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.Padding = new System.Windows.Forms.Padding(2);
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvdata.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvdata.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvdata.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.btnseleccionar,
@@ -124,9 +127,9 @@
             this.dgvdata.Name = "dgvdata";
             this.dgvdata.ReadOnly = true;
             this.dgvdata.RowHeadersWidth = 102;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvdata.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvdata.RowsDefaultCellStyle = dataGridViewCellStyle14;
             this.dgvdata.RowTemplate.Height = 28;
             this.dgvdata.Size = new System.Drawing.Size(33640, 6905);
             this.dgvdata.TabIndex = 47;
@@ -367,65 +370,36 @@
             // 
             this.dgvCategoria.AllowUserToAddRows = false;
             this.dgvCategoria.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(2);
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvCategoria.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(2);
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvCategoria.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dgvCategoria.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCategoria.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewButtonColumn1,
+            this.btnseleccionarc,
             this.idcategoria,
             this.CategoriaD,
-            this.Estadoc});
+            this.Estadoc,
+            this.EstadoValorC});
             this.dgvCategoria.Location = new System.Drawing.Point(727, 232);
             this.dgvCategoria.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.dgvCategoria.MultiSelect = false;
             this.dgvCategoria.Name = "dgvCategoria";
             this.dgvCategoria.ReadOnly = true;
             this.dgvCategoria.RowHeadersWidth = 102;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvCategoria.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvCategoria.RowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dgvCategoria.RowTemplate.Height = 28;
             this.dgvCategoria.Size = new System.Drawing.Size(2243, 887);
             this.dgvCategoria.TabIndex = 57;
-            // 
-            // dataGridViewButtonColumn1
-            // 
-            this.dataGridViewButtonColumn1.HeaderText = "";
-            this.dataGridViewButtonColumn1.MinimumWidth = 12;
-            this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
-            this.dataGridViewButtonColumn1.ReadOnly = true;
-            this.dataGridViewButtonColumn1.Width = 30;
-            // 
-            // idcategoria
-            // 
-            this.idcategoria.HeaderText = "IdCategoria";
-            this.idcategoria.MinimumWidth = 12;
-            this.idcategoria.Name = "idcategoria";
-            this.idcategoria.ReadOnly = true;
-            this.idcategoria.Width = 250;
-            // 
-            // CategoriaD
-            // 
-            this.CategoriaD.HeaderText = "Categoria";
-            this.CategoriaD.MinimumWidth = 12;
-            this.CategoriaD.Name = "CategoriaD";
-            this.CategoriaD.ReadOnly = true;
-            this.CategoriaD.Width = 150;
-            // 
-            // Estadoc
-            // 
-            this.Estadoc.HeaderText = "Estado";
-            this.Estadoc.MinimumWidth = 12;
-            this.Estadoc.Name = "Estadoc";
-            this.Estadoc.ReadOnly = true;
-            this.Estadoc.Width = 250;
+            this.dgvCategoria.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCategoria_CellContentClick);
+            this.dgvCategoria.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvCategoria_CellPainting);
             // 
             // label3
             // 
@@ -451,68 +425,69 @@
             this.label9.TabIndex = 59;
             this.label9.Text = "Detalle Categorías";
             // 
-            // iconButton1
+            // btnEliminarC
             // 
-            this.iconButton1.BackColor = System.Drawing.Color.Firebrick;
-            this.iconButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.iconButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton1.ForeColor = System.Drawing.Color.White;
-            this.iconButton1.IconChar = FontAwesome.Sharp.IconChar.TrashAlt;
-            this.iconButton1.IconColor = System.Drawing.Color.White;
-            this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton1.IconSize = 16;
-            this.iconButton1.Location = new System.Drawing.Point(83, 596);
-            this.iconButton1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Size = new System.Drawing.Size(512, 55);
-            this.iconButton1.TabIndex = 62;
-            this.iconButton1.Text = "Eliminar";
-            this.iconButton1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.iconButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.iconButton1.UseVisualStyleBackColor = false;
+            this.btnEliminarC.BackColor = System.Drawing.Color.Firebrick;
+            this.btnEliminarC.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnEliminarC.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnEliminarC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEliminarC.ForeColor = System.Drawing.Color.White;
+            this.btnEliminarC.IconChar = FontAwesome.Sharp.IconChar.TrashAlt;
+            this.btnEliminarC.IconColor = System.Drawing.Color.White;
+            this.btnEliminarC.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnEliminarC.IconSize = 16;
+            this.btnEliminarC.Location = new System.Drawing.Point(83, 596);
+            this.btnEliminarC.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnEliminarC.Name = "btnEliminarC";
+            this.btnEliminarC.Size = new System.Drawing.Size(512, 55);
+            this.btnEliminarC.TabIndex = 62;
+            this.btnEliminarC.Text = "Eliminar";
+            this.btnEliminarC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEliminarC.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnEliminarC.UseVisualStyleBackColor = false;
             // 
-            // iconButton2
+            // btnLimiparC
             // 
-            this.iconButton2.BackColor = System.Drawing.Color.RoyalBlue;
-            this.iconButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.iconButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton2.ForeColor = System.Drawing.Color.White;
-            this.iconButton2.IconChar = FontAwesome.Sharp.IconChar.Broom;
-            this.iconButton2.IconColor = System.Drawing.Color.White;
-            this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton2.IconSize = 18;
-            this.iconButton2.Location = new System.Drawing.Point(83, 527);
-            this.iconButton2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.iconButton2.Name = "iconButton2";
-            this.iconButton2.Size = new System.Drawing.Size(512, 55);
-            this.iconButton2.TabIndex = 61;
-            this.iconButton2.Text = "Limpiar";
-            this.iconButton2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.iconButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.iconButton2.UseVisualStyleBackColor = false;
+            this.btnLimiparC.BackColor = System.Drawing.Color.RoyalBlue;
+            this.btnLimiparC.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimiparC.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnLimiparC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLimiparC.ForeColor = System.Drawing.Color.White;
+            this.btnLimiparC.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.btnLimiparC.IconColor = System.Drawing.Color.White;
+            this.btnLimiparC.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnLimiparC.IconSize = 18;
+            this.btnLimiparC.Location = new System.Drawing.Point(83, 527);
+            this.btnLimiparC.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnLimiparC.Name = "btnLimiparC";
+            this.btnLimiparC.Size = new System.Drawing.Size(512, 55);
+            this.btnLimiparC.TabIndex = 61;
+            this.btnLimiparC.Text = "Limpiar";
+            this.btnLimiparC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnLimiparC.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnLimiparC.UseVisualStyleBackColor = false;
             // 
-            // iconButton3
+            // btnGuardarc
             // 
-            this.iconButton3.BackColor = System.Drawing.Color.ForestGreen;
-            this.iconButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton3.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.iconButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton3.ForeColor = System.Drawing.Color.White;
-            this.iconButton3.IconChar = FontAwesome.Sharp.IconChar.Save;
-            this.iconButton3.IconColor = System.Drawing.Color.White;
-            this.iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton3.IconSize = 16;
-            this.iconButton3.Location = new System.Drawing.Point(83, 458);
-            this.iconButton3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.iconButton3.Name = "iconButton3";
-            this.iconButton3.Size = new System.Drawing.Size(512, 55);
-            this.iconButton3.TabIndex = 60;
-            this.iconButton3.Text = "Guardar";
-            this.iconButton3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.iconButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.iconButton3.UseVisualStyleBackColor = false;
+            this.btnGuardarc.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnGuardarc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnGuardarc.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnGuardarc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardarc.ForeColor = System.Drawing.Color.White;
+            this.btnGuardarc.IconChar = FontAwesome.Sharp.IconChar.Save;
+            this.btnGuardarc.IconColor = System.Drawing.Color.White;
+            this.btnGuardarc.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnGuardarc.IconSize = 16;
+            this.btnGuardarc.Location = new System.Drawing.Point(83, 458);
+            this.btnGuardarc.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnGuardarc.Name = "btnGuardarc";
+            this.btnGuardarc.Size = new System.Drawing.Size(512, 55);
+            this.btnGuardarc.TabIndex = 60;
+            this.btnGuardarc.Text = "Guardar";
+            this.btnGuardarc.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGuardarc.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnGuardarc.UseVisualStyleBackColor = false;
+            this.btnGuardarc.Click += new System.EventHandler(this.btnGuardarc_Click);
             // 
             // txtcategorias
             // 
@@ -533,42 +508,44 @@
             this.label1.TabIndex = 63;
             this.label1.Text = "Categorias productos:";
             // 
-            // iconButton4
+            // btnlimpiarbuscadorC
             // 
-            this.iconButton4.BackColor = System.Drawing.Color.White;
-            this.iconButton4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton4.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.iconButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton4.ForeColor = System.Drawing.Color.Black;
-            this.iconButton4.IconChar = FontAwesome.Sharp.IconChar.Broom;
-            this.iconButton4.IconColor = System.Drawing.Color.Black;
-            this.iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton4.IconSize = 18;
-            this.iconButton4.Location = new System.Drawing.Point(2483, 102);
-            this.iconButton4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.iconButton4.Name = "iconButton4";
-            this.iconButton4.Size = new System.Drawing.Size(112, 55);
-            this.iconButton4.TabIndex = 69;
-            this.iconButton4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.iconButton4.UseVisualStyleBackColor = false;
+            this.btnlimpiarbuscadorC.BackColor = System.Drawing.Color.White;
+            this.btnlimpiarbuscadorC.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnlimpiarbuscadorC.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnlimpiarbuscadorC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnlimpiarbuscadorC.ForeColor = System.Drawing.Color.Black;
+            this.btnlimpiarbuscadorC.IconChar = FontAwesome.Sharp.IconChar.Broom;
+            this.btnlimpiarbuscadorC.IconColor = System.Drawing.Color.Black;
+            this.btnlimpiarbuscadorC.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnlimpiarbuscadorC.IconSize = 18;
+            this.btnlimpiarbuscadorC.Location = new System.Drawing.Point(2483, 102);
+            this.btnlimpiarbuscadorC.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnlimpiarbuscadorC.Name = "btnlimpiarbuscadorC";
+            this.btnlimpiarbuscadorC.Size = new System.Drawing.Size(112, 55);
+            this.btnlimpiarbuscadorC.TabIndex = 69;
+            this.btnlimpiarbuscadorC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnlimpiarbuscadorC.UseVisualStyleBackColor = false;
+            this.btnlimpiarbuscadorC.Click += new System.EventHandler(this.btnlimpiarbuscadorC_Click);
             // 
-            // iconButton5
+            // btnbuscarc
             // 
-            this.iconButton5.BackColor = System.Drawing.Color.White;
-            this.iconButton5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconButton5.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.iconButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.iconButton5.ForeColor = System.Drawing.Color.Black;
-            this.iconButton5.IconChar = FontAwesome.Sharp.IconChar.Search;
-            this.iconButton5.IconColor = System.Drawing.Color.Black;
-            this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconButton5.IconSize = 16;
-            this.iconButton5.Location = new System.Drawing.Point(2355, 102);
-            this.iconButton5.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.iconButton5.Name = "iconButton5";
-            this.iconButton5.Size = new System.Drawing.Size(112, 55);
-            this.iconButton5.TabIndex = 68;
-            this.iconButton5.UseVisualStyleBackColor = false;
+            this.btnbuscarc.BackColor = System.Drawing.Color.White;
+            this.btnbuscarc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnbuscarc.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnbuscarc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnbuscarc.ForeColor = System.Drawing.Color.Black;
+            this.btnbuscarc.IconChar = FontAwesome.Sharp.IconChar.Search;
+            this.btnbuscarc.IconColor = System.Drawing.Color.Black;
+            this.btnbuscarc.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnbuscarc.IconSize = 16;
+            this.btnbuscarc.Location = new System.Drawing.Point(2355, 102);
+            this.btnbuscarc.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnbuscarc.Name = "btnbuscarc";
+            this.btnbuscarc.Size = new System.Drawing.Size(112, 55);
+            this.btnbuscarc.TabIndex = 68;
+            this.btnbuscarc.UseVisualStyleBackColor = false;
+            this.btnbuscarc.Click += new System.EventHandler(this.btnbuscarc_Click);
             // 
             // txtNombrec
             // 
@@ -620,23 +597,86 @@
             this.cmbEstadoC.Size = new System.Drawing.Size(505, 39);
             this.cmbEstadoC.TabIndex = 70;
             // 
+            // txtIndicec
+            // 
+            this.txtIndicec.Location = new System.Drawing.Point(492, 147);
+            this.txtIndicec.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtIndicec.Name = "txtIndicec";
+            this.txtIndicec.Size = new System.Drawing.Size(60, 38);
+            this.txtIndicec.TabIndex = 73;
+            this.txtIndicec.Text = "-1";
+            this.txtIndicec.Visible = false;
+            // 
+            // txtIdC
+            // 
+            this.txtIdC.Location = new System.Drawing.Point(575, 147);
+            this.txtIdC.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtIdC.Name = "txtIdC";
+            this.txtIdC.Size = new System.Drawing.Size(60, 38);
+            this.txtIdC.TabIndex = 72;
+            this.txtIdC.Text = "0";
+            this.txtIdC.Visible = false;
+            // 
+            // btnseleccionarc
+            // 
+            this.btnseleccionarc.HeaderText = "";
+            this.btnseleccionarc.MinimumWidth = 12;
+            this.btnseleccionarc.Name = "btnseleccionarc";
+            this.btnseleccionarc.ReadOnly = true;
+            this.btnseleccionarc.Width = 30;
+            // 
+            // idcategoria
+            // 
+            this.idcategoria.HeaderText = "IdCategoria";
+            this.idcategoria.MinimumWidth = 12;
+            this.idcategoria.Name = "idcategoria";
+            this.idcategoria.ReadOnly = true;
+            this.idcategoria.Width = 250;
+            // 
+            // CategoriaD
+            // 
+            this.CategoriaD.HeaderText = "Categoria";
+            this.CategoriaD.MinimumWidth = 12;
+            this.CategoriaD.Name = "CategoriaD";
+            this.CategoriaD.ReadOnly = true;
+            this.CategoriaD.Width = 150;
+            // 
+            // Estadoc
+            // 
+            this.Estadoc.HeaderText = "Estado";
+            this.Estadoc.MinimumWidth = 12;
+            this.Estadoc.Name = "Estadoc";
+            this.Estadoc.ReadOnly = true;
+            this.Estadoc.Width = 250;
+            // 
+            // EstadoValorC
+            // 
+            this.EstadoValorC.HeaderText = "EstadoValorC";
+            this.EstadoValorC.MinimumWidth = 12;
+            this.EstadoValorC.Name = "EstadoValorC";
+            this.EstadoValorC.ReadOnly = true;
+            this.EstadoValorC.Visible = false;
+            this.EstadoValorC.Width = 250;
+            // 
             // frmCategoria
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(240F, 240F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3844, 2108);
+            this.Controls.Add(this.txtIndicec);
+            this.Controls.Add(this.txtIdC);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbEstadoC);
-            this.Controls.Add(this.iconButton4);
-            this.Controls.Add(this.iconButton5);
+            this.Controls.Add(this.btnlimpiarbuscadorC);
+            this.Controls.Add(this.btnbuscarc);
             this.Controls.Add(this.txtNombrec);
             this.Controls.Add(this.cmbBuscarc);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtcategorias);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.iconButton1);
-            this.Controls.Add(this.iconButton2);
-            this.Controls.Add(this.iconButton3);
+            this.Controls.Add(this.btnEliminarC);
+            this.Controls.Add(this.btnLimiparC);
+            this.Controls.Add(this.btnGuardarc);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dgvCategoria);
@@ -691,21 +731,24 @@
         private System.Windows.Forms.DataGridView dgvCategoria;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label9;
-        private FontAwesome.Sharp.IconButton iconButton1;
-        private FontAwesome.Sharp.IconButton iconButton2;
-        private FontAwesome.Sharp.IconButton iconButton3;
+        private FontAwesome.Sharp.IconButton btnEliminarC;
+        private FontAwesome.Sharp.IconButton btnLimiparC;
+        private FontAwesome.Sharp.IconButton btnGuardarc;
         private System.Windows.Forms.TextBox txtcategorias;
         private System.Windows.Forms.Label label1;
-        private FontAwesome.Sharp.IconButton iconButton4;
-        private FontAwesome.Sharp.IconButton iconButton5;
+        private FontAwesome.Sharp.IconButton btnlimpiarbuscadorC;
+        private FontAwesome.Sharp.IconButton btnbuscarc;
         private System.Windows.Forms.TextBox txtNombrec;
         private System.Windows.Forms.ComboBox cmbBuscarc;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbEstadoC;
-        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
+        private System.Windows.Forms.TextBox txtIndicec;
+        private System.Windows.Forms.TextBox txtIdC;
+        private System.Windows.Forms.DataGridViewButtonColumn btnseleccionarc;
         private System.Windows.Forms.DataGridViewTextBoxColumn idcategoria;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoriaD;
         private System.Windows.Forms.DataGridViewTextBoxColumn Estadoc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EstadoValorC;
     }
 }

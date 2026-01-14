@@ -45,12 +45,12 @@ namespace CapaPresentacion
 
                 if (columna.Visible == true && columna.Name != "btnseleccionar")
                 {
-                    cbobusqueda.Items.Add(new OpcionCombo() { Valor = columna.Name, Texto = columna.HeaderText });
+                    cmbBuscarc.Items.Add(new OpcionCombo() { Valor = columna.Name, Texto = columna.HeaderText });
                 }
             }
             cmbBuscarc.DisplayMember = "Texto";
             cmbBuscarc.ValueMember = "Valor";
-            //cmbBuscarc.SelectedIndex = 0;
+            cmbBuscarc.SelectedIndex = 0;
 
 
 
@@ -62,7 +62,8 @@ namespace CapaPresentacion
 
                 dgvCategoria.Rows.Add(new object[] {"",item.IdCategoria,
                     item.Descripcion,                    
-                    item.Estado == true ? "Activo" : "No Activo"
+                    item.Estado == true ? "Activo" : "No Activo",
+                    item.Estado == true ? 1 : 0 
                 });
             }
         }
@@ -70,54 +71,7 @@ namespace CapaPresentacion
         private void btnguardar_Click(object sender, EventArgs e)
         {
 
-            string mensaje = string.Empty;
-
-            Categoria obj = new Categoria()
-            {
-                IdCategoria = Convert.ToInt32(txtid.Text),
-                Descripcion = txtcategorias.Text,
-                Estado = Convert.ToInt32(((OpcionCombo)cmbEstadoC.SelectedItem).Valor) == 1 ? true : false
-            };
-
-            if (obj.IdCategoria == 0)
-            {
-                int idgenerado = new CN_Categoria().Registrar(obj, out mensaje);
-
-                if (idgenerado != 0)
-                {
-
-                    dgvCategoria.Rows.Add(new object[] {"",idgenerado,txtcategorias.Text,
-                        ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString(),
-                        ((OpcionCombo)cmbEstadoC.SelectedItem).Texto.ToString()
-                    });
-
-                    Limpiar();
-                }
-                else
-                {
-                    MessageBox.Show(mensaje);
-                }
-
-
-            }
-            else
-            {
-                bool resultado = new CN_Categoria().Editar(obj, out mensaje);
-
-                if (resultado)
-                {
-                    DataGridViewRow row = dgvCategoria.Rows[Convert.ToInt32(txtindice.Text)];
-                    row.Cells["Id"].Value = txtid.Text;
-                    row.Cells["Descripcion"].Value = txtcategorias.Text;
-                    row.Cells["EstadoValor"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString();
-                    row.Cells["Estado"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Texto.ToString();
-                    Limpiar();
-                }
-                else
-                {
-                    MessageBox.Show(mensaje);
-                }
-            }
+           
 
 
         }
@@ -126,11 +80,11 @@ namespace CapaPresentacion
         private void Limpiar()
         {
 
-            txtindice.Text = "-1";
+            txtIndicec.Text = "-1";
             txtid.Text = "0";
             txtcategorias.Text = "";
             cmbEstadoC.SelectedIndex = 0;
-
+            txtNombrec.Text = "";
             txtcategorias.Select();
         }
 
@@ -158,7 +112,7 @@ namespace CapaPresentacion
 
         private void dgvCategoria_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvCategoria.Columns[e.ColumnIndex].Name == "btnseleccionar")
+            if (dgvCategoria.Columns[e.ColumnIndex].Name == "btnseleccionarc")
             {
 
                 int indice = e.RowIndex;
@@ -166,19 +120,16 @@ namespace CapaPresentacion
                 if (indice >= 0)
                 {
 
-                    txtindice.Text = indice.ToString();
-                    txtid.Text = dgvCategoria.Rows[indice].Cells["Id"].Value.ToString();
-                    txtcategorias.Text = dgvCategoria.Rows[indice].Cells["Descripcion"].Value.ToString();
+                    txtIndicec.Text = indice.ToString();
+                    txtIdC.Text = dgvCategoria.Rows[indice].Cells["IdCategoria"].Value.ToString();
+                    txtcategorias.Text = dgvCategoria.Rows[indice].Cells["CategoriaD"].Value.ToString();
 
-
-
-
-                    foreach (OpcionCombo oc in cboestado.Items)
+                    foreach (OpcionCombo oc in cmbEstadoC.Items)
                     {
-                        if (Convert.ToInt32(oc.Valor) == Convert.ToInt32(dgvCategoria.Rows[indice].Cells["EstadoValor"].Value))
+                        if (Convert.ToInt32(oc.Valor) == Convert.ToInt32(dgvCategoria.Rows[indice].Cells["EstadoValorC"].Value))
                         {
-                            int indice_combo = cboestado.Items.IndexOf(oc);
-                            cboestado.SelectedIndex = indice_combo;
+                            int indice_combo = cmbEstadoC.Items.IndexOf(oc);
+                            cmbEstadoC.SelectedIndex = indice_combo;
                             break;
                         }
                     }
@@ -207,7 +158,7 @@ namespace CapaPresentacion
 
                     if (respuesta)
                     {
-                        dgvCategoria.Rows.RemoveAt(Convert.ToInt32(txtindice.Text));
+                        dgvCategoria.Rows.RemoveAt(Convert.ToInt32(txtIndicec.Text));
                         Limpiar();
                     }
                     else
@@ -246,6 +197,81 @@ namespace CapaPresentacion
         }
 
         private void btnlimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
+
+        private void btnGuardarc_Click(object sender, EventArgs e)
+        {
+            string mensaje = string.Empty;
+
+            Categoria obj = new Categoria()
+            {
+                IdCategoria = Convert.ToInt32(txtIdC.Text),
+                Descripcion = txtcategorias.Text,
+                Estado = Convert.ToInt32(((OpcionCombo)cmbEstadoC.SelectedItem).Valor) == 1 ? true : false
+
+            };
+
+            if (obj.IdCategoria == 0)
+            {
+                int idgenerado = new CN_Categoria().Registrar(obj, out mensaje);
+
+                if (idgenerado != 0)
+                {
+
+                    dgvCategoria.Rows.Add(new object[] {"",idgenerado,txtcategorias.Text,
+                        ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString()
+
+                    });
+
+                    Limpiar();
+                }
+                else
+                {
+                    MessageBox.Show(mensaje);
+                }
+
+
+            }
+            else
+            {
+                bool resultado = new CN_Categoria().Editar(obj, out mensaje);
+
+                if (resultado)
+                {
+                    DataGridViewRow row = dgvCategoria.Rows[Convert.ToInt32(txtIndicec.Text)];
+                    row.Cells["IdCategoria"].Value = txtIdC.Text;
+                    row.Cells["CategoriaD"].Value = txtcategorias.Text;
+                    row.Cells["EstadoValorC"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Valor.ToString();
+                    row.Cells["EstadoC"].Value = ((OpcionCombo)cmbEstadoC.SelectedItem).Texto.ToString();
+                    Limpiar();
+                }
+                else
+                {
+                    MessageBox.Show(mensaje);
+                }
+            }
+        }
+
+        private void btnbuscarc_Click(object sender, EventArgs e)
+        {
+            string columnaFiltro = ((OpcionCombo)cmbBuscarc.SelectedItem).Valor.ToString();
+
+            if (dgvCategoria.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow row in dgvCategoria.Rows)
+                {
+
+                    if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtNombrec.Text.Trim().ToUpper()))
+                        row.Visible = true;
+                    else
+                        row.Visible = false;
+                }
+            }
+        }
+
+        private void btnlimpiarbuscadorC_Click(object sender, EventArgs e)
         {
             Limpiar();
         }

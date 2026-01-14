@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnbuscar = new FontAwesome.Sharp.IconButton();
             this.dgvdata = new System.Windows.Forms.DataGridView();
             this.btnseleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -67,20 +67,18 @@
             this.lblCuit = new System.Windows.Forms.Label();
             this.txtCuit = new System.Windows.Forms.TextBox();
             this.lblTipoDni = new System.Windows.Forms.Label();
-            this.txtIdTipoDni = new System.Windows.Forms.TextBox();
+            this.cboTipoDni = new System.Windows.Forms.ComboBox();
             this.lblIva = new System.Windows.Forms.Label();
-            this.txtIdCodigoIva = new System.Windows.Forms.TextBox();
+            this.cboTipoIVA = new System.Windows.Forms.ComboBox();
             this.tabUbicacion = new System.Windows.Forms.TabPage();
             this.lblDomicilio = new System.Windows.Forms.Label();
             this.txtDomicilio = new System.Windows.Forms.TextBox();
             this.lblProvincia = new System.Windows.Forms.Label();
-            this.txtIdProvincia = new System.Windows.Forms.TextBox();
+            this.cboProvincia = new System.Windows.Forms.ComboBox();
             this.lblLocalidad = new System.Windows.Forms.Label();
-            this.txtIdLocalidad = new System.Windows.Forms.TextBox();
+            this.cboLocalidad = new System.Windows.Forms.ComboBox();
             this.lblZona = new System.Windows.Forms.Label();
-            this.txtIdZona = new System.Windows.Forms.TextBox();
-            this.lblPais = new System.Windows.Forms.Label();
-            this.txtIdPais = new System.Windows.Forms.TextBox();
+            this.cboZona = new System.Windows.Forms.ComboBox();
             this.lblLat = new System.Windows.Forms.Label();
             this.txtLatitud = new System.Windows.Forms.TextBox();
             this.lblLon = new System.Windows.Forms.Label();
@@ -130,15 +128,15 @@
             // 
             this.dgvdata.AllowUserToAddRows = false;
             this.dgvdata.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(2);
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvdata.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(2);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvdata.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvdata.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvdata.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.btnseleccionar,
@@ -155,9 +153,9 @@
             this.dgvdata.Name = "dgvdata";
             this.dgvdata.ReadOnly = true;
             this.dgvdata.RowHeadersWidth = 102;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvdata.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvdata.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvdata.RowTemplate.Height = 28;
             this.dgvdata.Size = new System.Drawing.Size(2243, 887);
             this.dgvdata.TabIndex = 47;
@@ -318,7 +316,7 @@
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.White;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(80, 50);
+            this.label9.Location = new System.Drawing.Point(80, 28);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(350, 58);
@@ -406,7 +404,7 @@
             // 
             this.cboestado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboestado.FormattingEnabled = true;
-            this.cboestado.Location = new System.Drawing.Point(220, 963);
+            this.cboestado.Location = new System.Drawing.Point(197, 983);
             this.cboestado.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.cboestado.Name = "cboestado";
             this.cboestado.Size = new System.Drawing.Size(473, 39);
@@ -429,11 +427,11 @@
             this.tabControl1.Controls.Add(this.tabGeneral);
             this.tabControl1.Controls.Add(this.tabUbicacion);
             this.tabControl1.Controls.Add(this.tabContacto);
-            this.tabControl1.Location = new System.Drawing.Point(80, 119);
+            this.tabControl1.Location = new System.Drawing.Point(80, 147);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(613, 830);
+            this.tabControl1.Size = new System.Drawing.Size(613, 802);
             this.tabControl1.TabIndex = 60;
             // 
             // tabGeneral
@@ -449,14 +447,14 @@
             this.tabGeneral.Controls.Add(this.lblCuit);
             this.tabGeneral.Controls.Add(this.txtCuit);
             this.tabGeneral.Controls.Add(this.lblTipoDni);
-            this.tabGeneral.Controls.Add(this.txtIdTipoDni);
+            this.tabGeneral.Controls.Add(this.cboTipoDni);
             this.tabGeneral.Controls.Add(this.lblIva);
-            this.tabGeneral.Controls.Add(this.txtIdCodigoIva);
+            this.tabGeneral.Controls.Add(this.cboTipoIVA);
             this.tabGeneral.Location = new System.Drawing.Point(10, 48);
             this.tabGeneral.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabGeneral.Size = new System.Drawing.Size(593, 772);
+            this.tabGeneral.Size = new System.Drawing.Size(593, 744);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "Datos";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -557,17 +555,19 @@
             this.lblTipoDni.Location = new System.Drawing.Point(5, 620);
             this.lblTipoDni.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblTipoDni.Name = "lblTipoDni";
-            this.lblTipoDni.Size = new System.Drawing.Size(166, 32);
+            this.lblTipoDni.Size = new System.Drawing.Size(132, 32);
             this.lblTipoDni.TabIndex = 10;
-            this.lblTipoDni.Text = "ID Tipo DNI:";
+            this.lblTipoDni.Text = "Tipo DNI:";
             // 
-            // txtIdTipoDni
+            // cboTipoDni
             // 
-            this.txtIdTipoDni.Location = new System.Drawing.Point(176, 613);
-            this.txtIdTipoDni.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdTipoDni.Name = "txtIdTipoDni";
-            this.txtIdTipoDni.Size = new System.Drawing.Size(100, 38);
-            this.txtIdTipoDni.TabIndex = 11;
+            this.cboTipoDni.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTipoDni.FormattingEnabled = true;
+            this.cboTipoDni.Location = new System.Drawing.Point(16, 660);
+            this.cboTipoDni.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.cboTipoDni.Name = "cboTipoDni";
+            this.cboTipoDni.Size = new System.Drawing.Size(260, 39);
+            this.cboTipoDni.TabIndex = 11;
             // 
             // lblIva
             // 
@@ -575,30 +575,30 @@
             this.lblIva.Location = new System.Drawing.Point(309, 620);
             this.lblIva.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblIva.Name = "lblIva";
-            this.lblIva.Size = new System.Drawing.Size(101, 32);
+            this.lblIva.Size = new System.Drawing.Size(130, 32);
             this.lblIva.TabIndex = 12;
-            this.lblIva.Text = "ID IVA:";
+            this.lblIva.Text = "Tipo IVA:";
             // 
-            // txtIdCodigoIva
+            // cboTipoIVA
             // 
-            this.txtIdCodigoIva.Location = new System.Drawing.Point(429, 613);
-            this.txtIdCodigoIva.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdCodigoIva.Name = "txtIdCodigoIva";
-            this.txtIdCodigoIva.Size = new System.Drawing.Size(100, 38);
-            this.txtIdCodigoIva.TabIndex = 13;
+            this.cboTipoIVA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTipoIVA.FormattingEnabled = true;
+            this.cboTipoIVA.Location = new System.Drawing.Point(300, 660);
+            this.cboTipoIVA.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.cboTipoIVA.Name = "cboTipoIVA";
+            this.cboTipoIVA.Size = new System.Drawing.Size(260, 39);
+            this.cboTipoIVA.TabIndex = 13;
             // 
             // tabUbicacion
             // 
             this.tabUbicacion.Controls.Add(this.lblDomicilio);
             this.tabUbicacion.Controls.Add(this.txtDomicilio);
             this.tabUbicacion.Controls.Add(this.lblProvincia);
-            this.tabUbicacion.Controls.Add(this.txtIdProvincia);
+            this.tabUbicacion.Controls.Add(this.cboProvincia);
             this.tabUbicacion.Controls.Add(this.lblLocalidad);
-            this.tabUbicacion.Controls.Add(this.txtIdLocalidad);
+            this.tabUbicacion.Controls.Add(this.cboLocalidad);
             this.tabUbicacion.Controls.Add(this.lblZona);
-            this.tabUbicacion.Controls.Add(this.txtIdZona);
-            this.tabUbicacion.Controls.Add(this.lblPais);
-            this.tabUbicacion.Controls.Add(this.txtIdPais);
+            this.tabUbicacion.Controls.Add(this.cboZona);
             this.tabUbicacion.Controls.Add(this.lblLat);
             this.tabUbicacion.Controls.Add(this.txtLatitud);
             this.tabUbicacion.Controls.Add(this.lblLon);
@@ -632,79 +632,68 @@
             // lblProvincia
             // 
             this.lblProvincia.AutoSize = true;
-            this.lblProvincia.Location = new System.Drawing.Point(16, 155);
+            this.lblProvincia.Location = new System.Drawing.Point(15, 130);
             this.lblProvincia.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblProvincia.Name = "lblProvincia";
-            this.lblProvincia.Size = new System.Drawing.Size(114, 32);
+            this.lblProvincia.Size = new System.Drawing.Size(140, 32);
             this.lblProvincia.TabIndex = 2;
-            this.lblProvincia.Text = "ID Prov:";
+            this.lblProvincia.Text = "Provincia:";
             // 
-            // txtIdProvincia
+            // cboProvincia
             // 
-            this.txtIdProvincia.Location = new System.Drawing.Point(160, 148);
-            this.txtIdProvincia.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdProvincia.Name = "txtIdProvincia";
-            this.txtIdProvincia.Size = new System.Drawing.Size(100, 38);
-            this.txtIdProvincia.TabIndex = 3;
+            this.cboProvincia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboProvincia.FormattingEnabled = true;
+            this.cboProvincia.Location = new System.Drawing.Point(16, 184);
+            this.cboProvincia.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.cboProvincia.Name = "cboProvincia";
+            this.cboProvincia.Size = new System.Drawing.Size(527, 39);
+            this.cboProvincia.TabIndex = 3;
+            this.cboProvincia.SelectedIndexChanged += new System.EventHandler(this.cboProvincia_SelectedIndexChanged);
             // 
             // lblLocalidad
             // 
             this.lblLocalidad.AutoSize = true;
-            this.lblLocalidad.Location = new System.Drawing.Point(293, 155);
+            this.lblLocalidad.Location = new System.Drawing.Point(16, 251);
             this.lblLocalidad.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblLocalidad.Name = "lblLocalidad";
-            this.lblLocalidad.Size = new System.Drawing.Size(102, 32);
+            this.lblLocalidad.Size = new System.Drawing.Size(146, 32);
             this.lblLocalidad.TabIndex = 4;
-            this.lblLocalidad.Text = "ID Loc:";
+            this.lblLocalidad.Text = "Localidad:";
             // 
-            // txtIdLocalidad
+            // cboLocalidad
             // 
-            this.txtIdLocalidad.Location = new System.Drawing.Point(427, 148);
-            this.txtIdLocalidad.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdLocalidad.Name = "txtIdLocalidad";
-            this.txtIdLocalidad.Size = new System.Drawing.Size(100, 38);
-            this.txtIdLocalidad.TabIndex = 5;
+            this.cboLocalidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboLocalidad.FormattingEnabled = true;
+            this.cboLocalidad.Location = new System.Drawing.Point(16, 309);
+            this.cboLocalidad.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.cboLocalidad.Name = "cboLocalidad";
+            this.cboLocalidad.Size = new System.Drawing.Size(527, 39);
+            this.cboLocalidad.TabIndex = 5;
             // 
             // lblZona
             // 
             this.lblZona.AutoSize = true;
-            this.lblZona.Location = new System.Drawing.Point(16, 250);
+            this.lblZona.Location = new System.Drawing.Point(16, 371);
             this.lblZona.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblZona.Name = "lblZona";
-            this.lblZona.Size = new System.Drawing.Size(121, 32);
+            this.lblZona.Size = new System.Drawing.Size(87, 32);
             this.lblZona.TabIndex = 6;
-            this.lblZona.Text = "ID Zona:";
+            this.lblZona.Text = "Zona:";
             // 
-            // txtIdZona
+            // cboZona
             // 
-            this.txtIdZona.Location = new System.Drawing.Point(160, 243);
-            this.txtIdZona.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdZona.Name = "txtIdZona";
-            this.txtIdZona.Size = new System.Drawing.Size(100, 38);
-            this.txtIdZona.TabIndex = 7;
-            // 
-            // lblPais
-            // 
-            this.lblPais.AutoSize = true;
-            this.lblPais.Location = new System.Drawing.Point(293, 250);
-            this.lblPais.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.lblPais.Name = "lblPais";
-            this.lblPais.Size = new System.Drawing.Size(112, 32);
-            this.lblPais.TabIndex = 8;
-            this.lblPais.Text = "ID Pais:";
-            // 
-            // txtIdPais
-            // 
-            this.txtIdPais.Location = new System.Drawing.Point(427, 243);
-            this.txtIdPais.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtIdPais.Name = "txtIdPais";
-            this.txtIdPais.Size = new System.Drawing.Size(100, 38);
-            this.txtIdPais.TabIndex = 9;
+            this.cboZona.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboZona.FormattingEnabled = true;
+            this.cboZona.Location = new System.Drawing.Point(16, 410);
+            this.cboZona.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.cboZona.Name = "cboZona";
+            this.cboZona.Size = new System.Drawing.Size(350, 39);
+            this.cboZona.TabIndex = 7;
             // 
             // lblLat
             // 
             this.lblLat.AutoSize = true;
-            this.lblLat.Location = new System.Drawing.Point(16, 346);
+            this.lblLat.Location = new System.Drawing.Point(5, 491);
             this.lblLat.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblLat.Name = "lblLat";
             this.lblLat.Size = new System.Drawing.Size(62, 32);
@@ -713,7 +702,7 @@
             // 
             // txtLatitud
             // 
-            this.txtLatitud.Location = new System.Drawing.Point(93, 339);
+            this.txtLatitud.Location = new System.Drawing.Point(82, 484);
             this.txtLatitud.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtLatitud.Name = "txtLatitud";
             this.txtLatitud.Size = new System.Drawing.Size(180, 38);
@@ -722,7 +711,7 @@
             // lblLon
             // 
             this.lblLon.AutoSize = true;
-            this.lblLon.Location = new System.Drawing.Point(307, 346);
+            this.lblLon.Location = new System.Drawing.Point(296, 491);
             this.lblLon.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblLon.Name = "lblLon";
             this.lblLon.Size = new System.Drawing.Size(70, 32);
@@ -731,7 +720,7 @@
             // 
             // txtLongitud
             // 
-            this.txtLongitud.Location = new System.Drawing.Point(387, 339);
+            this.txtLongitud.Location = new System.Drawing.Point(376, 484);
             this.txtLongitud.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtLongitud.Name = "txtLongitud";
             this.txtLongitud.Size = new System.Drawing.Size(180, 38);
@@ -969,20 +958,18 @@
         private System.Windows.Forms.Label lblCuit;
         private System.Windows.Forms.TextBox txtCuit;
         private System.Windows.Forms.Label lblTipoDni;
-        private System.Windows.Forms.TextBox txtIdTipoDni; 
+        private System.Windows.Forms.ComboBox cboTipoDni; 
         private System.Windows.Forms.Label lblIva;
-        private System.Windows.Forms.TextBox txtIdCodigoIva; 
+        private System.Windows.Forms.ComboBox cboTipoIVA; 
 
         private System.Windows.Forms.Label lblDomicilio;
         private System.Windows.Forms.TextBox txtDomicilio;
         private System.Windows.Forms.Label lblProvincia;
-        private System.Windows.Forms.TextBox txtIdProvincia;
+        private System.Windows.Forms.ComboBox cboProvincia;
         private System.Windows.Forms.Label lblLocalidad;
-        private System.Windows.Forms.TextBox txtIdLocalidad;
+        private System.Windows.Forms.ComboBox cboLocalidad;
         private System.Windows.Forms.Label lblZona;
-        private System.Windows.Forms.TextBox txtIdZona;
-        private System.Windows.Forms.Label lblPais;
-        private System.Windows.Forms.TextBox txtIdPais;
+        private System.Windows.Forms.ComboBox cboZona;
         private System.Windows.Forms.Label lblLat;
         private System.Windows.Forms.TextBox txtLatitud;
         private System.Windows.Forms.Label lblLon;

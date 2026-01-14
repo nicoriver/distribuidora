@@ -24,12 +24,63 @@ namespace CapaPresentacion
 
         private void frmClientes_Load(object sender, EventArgs e)
         {
+            // Estado
             cboestado.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Activo" });
             cboestado.Items.Add(new OpcionCombo() { Valor = 0, Texto = "No Activo" });
             cboestado.DisplayMember = "Texto";
             cboestado.ValueMember = "Valor";
             cboestado.SelectedIndex = 0;
 
+            // Tipo DNI - Valores precargados
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 1, Texto = "DNI" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 2, Texto = "CUIT" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 3, Texto = "Libreta Civil" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 4, Texto = "Libreta Enrolamiento" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 5, Texto = "Cédula" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 6, Texto = "Pasaporte" });
+            cboTipoDni.Items.Add(new OpcionCombo() { Valor = 7, Texto = "Otros" });
+            cboTipoDni.DisplayMember = "Texto";
+            cboTipoDni.ValueMember = "Valor";
+            cboTipoDni.SelectedIndex = 0;
+
+            // Tipo IVA - Valores precargados
+            cboTipoIVA.Items.Add(new OpcionCombo() { Valor = 1, Texto = "Consumidor Final" });
+            cboTipoIVA.Items.Add(new OpcionCombo() { Valor = 2, Texto = "Responsable Inscripto" });
+            cboTipoIVA.Items.Add(new OpcionCombo() { Valor = 3, Texto = "Responsable Monotributo" });
+            cboTipoIVA.Items.Add(new OpcionCombo() { Valor = 4, Texto = "No Categorizado" });
+            cboTipoIVA.DisplayMember = "Texto";
+            cboTipoIVA.ValueMember = "Valor";
+            cboTipoIVA.SelectedIndex = 0;
+
+            // Provincia - Desde BD
+            List<Provincia> listaProvincias = new CN_Provincia().Listar();
+            cboProvincia.Items.Add(new OpcionCombo() { Valor = 0, Texto = "Seleccione..." });
+            foreach (Provincia item in listaProvincias)
+            {
+                cboProvincia.Items.Add(new OpcionCombo() { Valor = item.IdProvincia, Texto = item.Nombre });
+            }
+            cboProvincia.DisplayMember = "Texto";
+            cboProvincia.ValueMember = "Valor";
+            cboProvincia.SelectedIndex = 0;
+
+            // Localidad - Se cargará al seleccionar provincia
+            cboLocalidad.Items.Add(new OpcionCombo() { Valor = 0, Texto = "Seleccione provincia primero..." });
+            cboLocalidad.DisplayMember = "Texto";
+            cboLocalidad.ValueMember = "Valor";
+            cboLocalidad.SelectedIndex = 0;
+
+            // Zona - Desde BD
+            List<Zona> listaZonas = new CN_Zona().Listar();
+            cboZona.Items.Add(new OpcionCombo() { Valor = 0, Texto = "Seleccione..." });
+            foreach (Zona item in listaZonas)
+            {
+                cboZona.Items.Add(new OpcionCombo() { Valor = item.IdZona, Texto = item.Nombre });
+            }
+            cboZona.DisplayMember = "Texto";
+            cboZona.ValueMember = "Valor";
+            cboZona.SelectedIndex = 0;
+
+            // Búsqueda
             foreach (DataGridViewColumn columna in dgvdata.Columns)
             {
                 if (columna.Visible == true && columna.Name != "btnseleccionar")
@@ -62,13 +113,14 @@ namespace CapaPresentacion
         {
             string mensaje = string.Empty;
 
+            // Obtener valores de ComboBox
+            int idTipoDni = Convert.ToInt32(((OpcionCombo)cboTipoDni.SelectedItem).Valor);
+            int idCodigoIva = Convert.ToInt32(((OpcionCombo)cboTipoIVA.SelectedItem).Valor);
+            int idProvincia = Convert.ToInt32(((OpcionCombo)cboProvincia.SelectedItem).Valor);
+            int idLocalidad = Convert.ToInt32(((OpcionCombo)cboLocalidad.SelectedItem).Valor);
+            int idZona = Convert.ToInt32(((OpcionCombo)cboZona.SelectedItem).Valor);
+            
             // Validaciones básicas de tipo de dato para evitar errores de conversión
-            if (!int.TryParse(txtIdTipoDni.Text, out int idTipoDni)) idTipoDni = 0;
-            if (!int.TryParse(txtIdCodigoIva.Text, out int idCodigoIva)) idCodigoIva = 0;
-            if (!int.TryParse(txtIdProvincia.Text, out int idProvincia)) idProvincia = 0;
-            if (!int.TryParse(txtIdLocalidad.Text, out int idLocalidad)) idLocalidad = 0;
-            if (!int.TryParse(txtIdZona.Text, out int idZona)) idZona = 0;
-            if (!int.TryParse(txtIdPais.Text, out int idPais)) idPais = 0;
             if (!int.TryParse(txtIdVendedor.Text, out int idVendedor)) idVendedor = 0;
             if (!decimal.TryParse(txtLatitud.Text, out decimal latitud)) latitud = 0;
             if (!decimal.TryParse(txtLongitud.Text, out decimal longitud)) longitud = 0;
@@ -88,7 +140,7 @@ namespace CapaPresentacion
                 IdProvincia = idProvincia,
                 IdLocalidad = idLocalidad,
                 IdZona = idZona,
-                IdPais = idPais,
+                IdPais = 0, // Campo eliminado del formulario
                 Latitud = latitud,
                 Longitud = longitud,
 
@@ -146,15 +198,14 @@ namespace CapaPresentacion
             txtNombre.Text = "";
             txtRazonSocial.Text = "";
             txtCuit.Text = "";
-            txtIdTipoDni.Text = "0";
-            txtIdCodigoIva.Text = "0";
+            cboTipoDni.SelectedIndex = 0;
+            cboTipoIVA.SelectedIndex = 0;
 
             // Ubicacion
             txtDomicilio.Text = "";
-            txtIdProvincia.Text = "0";
-            txtIdLocalidad.Text = "0";
-            txtIdZona.Text = "0";
-            txtIdPais.Text = "0";
+            cboProvincia.SelectedIndex = 0;
+            cboLocalidad.SelectedIndex = 0;
+            cboZona.SelectedIndex = 0;
             txtLatitud.Text = "0";
             txtLongitud.Text = "0";
 
@@ -212,15 +263,60 @@ namespace CapaPresentacion
                         txtNombre.Text = clienteSeleccionado.Nombre;
                         txtRazonSocial.Text = clienteSeleccionado.RazonSocial;
                         txtCuit.Text = clienteSeleccionado.Cuit;
-                        txtIdTipoDni.Text = clienteSeleccionado.IdTipoDni.ToString();
-                        txtIdCodigoIva.Text = clienteSeleccionado.IdCodigoIva.ToString();
+                        
+                        // Seleccionar Tipo DNI
+                        foreach (OpcionCombo oc in cboTipoDni.Items)
+                        {
+                            if (Convert.ToInt32(oc.Valor) == clienteSeleccionado.IdTipoDni)
+                            {
+                                cboTipoDni.SelectedIndex = cboTipoDni.Items.IndexOf(oc);
+                                break;
+                            }
+                        }
+
+                        // Seleccionar Tipo IVA
+                        foreach (OpcionCombo oc in cboTipoIVA.Items)
+                        {
+                            if (Convert.ToInt32(oc.Valor) == clienteSeleccionado.IdCodigoIva)
+                            {
+                                cboTipoIVA.SelectedIndex = cboTipoIVA.Items.IndexOf(oc);
+                                break;
+                            }
+                        }
 
                         // Ubicacion
                         txtDomicilio.Text = clienteSeleccionado.Domicilio;
-                        txtIdProvincia.Text = clienteSeleccionado.IdProvincia.ToString();
-                        txtIdLocalidad.Text = clienteSeleccionado.IdLocalidad.ToString();
-                        txtIdZona.Text = clienteSeleccionado.IdZona.ToString();
-                        txtIdPais.Text = clienteSeleccionado.IdPais.ToString();
+                        
+                        // Seleccionar Provincia
+                        foreach (OpcionCombo oc in cboProvincia.Items)
+                        {
+                            if (Convert.ToInt32(oc.Valor) == clienteSeleccionado.IdProvincia)
+                            {
+                                cboProvincia.SelectedIndex = cboProvincia.Items.IndexOf(oc);
+                                break;
+                            }
+                        }
+
+                        // Cargar localidades de la provincia y seleccionar
+                        CargarLocalidadesPorProvincia(clienteSeleccionado.IdProvincia);
+                        foreach (OpcionCombo oc in cboLocalidad.Items)
+                        {
+                            if (Convert.ToInt32(oc.Valor) == clienteSeleccionado.IdLocalidad)
+                            {
+                                cboLocalidad.SelectedIndex = cboLocalidad.Items.IndexOf(oc);
+                                break;
+                            }
+                        }
+
+                        // Seleccionar Zona
+                        foreach (OpcionCombo oc in cboZona.Items)
+                        {
+                            if (Convert.ToInt32(oc.Valor) == clienteSeleccionado.IdZona)
+                            {
+                                cboZona.SelectedIndex = cboZona.Items.IndexOf(oc);
+                                break;
+                            }
+                        }
                         txtLatitud.Text = clienteSeleccionado.Latitud.ToString();
                         txtLongitud.Text = clienteSeleccionado.Longitud.ToString();
 
@@ -303,6 +399,38 @@ namespace CapaPresentacion
         private void btnlimpiar_Click(object sender, EventArgs e)
         {
             Limpiar();
+        }
+
+        private void CargarLocalidadesPorProvincia(int idProvincia)
+        {
+            cboLocalidad.Items.Clear();
+            cboLocalidad.Items.Add(new OpcionCombo() { Valor = 0, Texto = "Seleccione..." });
+            
+            if (idProvincia > 0)
+            {
+                List<Localidad> listaLocalidades = new CN_Localidad().ListarPorProvincia(idProvincia);
+                foreach (Localidad item in listaLocalidades)
+                {
+                    cboLocalidad.Items.Add(new OpcionCombo() { Valor = item.IdLocalidad, Texto = item.Nombre });
+                }
+            }
+            
+            cboLocalidad.SelectedIndex = 0;
+        }
+
+        private void cboProvincia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboProvincia.SelectedIndex > 0)
+            {
+                int idProvincia = Convert.ToInt32(((OpcionCombo)cboProvincia.SelectedItem).Valor);
+                CargarLocalidadesPorProvincia(idProvincia);
+            }
+            else
+            {
+                cboLocalidad.Items.Clear();
+                cboLocalidad.Items.Add(new OpcionCombo() { Valor = 0, Texto = "Seleccione provincia primero..." });
+                cboLocalidad.SelectedIndex = 0;
+            }
         }
     }
 }

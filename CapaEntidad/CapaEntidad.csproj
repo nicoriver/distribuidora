@@ -57,6 +57,9 @@
     <Compile Include="Rol.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Venta.cs" />
+    <Compile Include="Provincia.cs" />
+    <Compile Include="Localidad.cs" />
+    <Compile Include="Zona.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
