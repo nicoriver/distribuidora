@@ -50,12 +50,15 @@
     <Compile Include="CN_Proveedor.cs" />
     <Compile Include="CN_Reporte.cs" />
     <Compile Include="CN_Rol.cs" />
+    <Compile Include="CN_TipoComprobante.cs" />
     <Compile Include="CN_Usuario.cs" />
     <Compile Include="CN_Venta.cs" />
     <Compile Include="CN__Producto.cs" />
     <Compile Include="CN_Provincia.cs" />
     <Compile Include="CN_Localidad.cs" />
     <Compile Include="CN_Zona.cs" />
+    <Compile Include="CN_Lista.cs" />
+    <Compile Include="CN_Iva.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

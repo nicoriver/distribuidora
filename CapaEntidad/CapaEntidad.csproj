@@ -60,6 +60,9 @@
     <Compile Include="Provincia.cs" />
     <Compile Include="Localidad.cs" />
     <Compile Include="Zona.cs" />
+    <Compile Include="Lista.cs" />
+    <Compile Include="Iva.cs" />
+    <Compile Include="TipoComprobante.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

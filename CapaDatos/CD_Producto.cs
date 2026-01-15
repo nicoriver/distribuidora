@@ -85,6 +85,11 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.oCategoria.IdCategoria);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
+                    cmd.Parameters.AddWithValue("Codigo_de_barra", obj.Codigo_de_barra ?? "");
+                    cmd.Parameters.AddWithValue("Precio_compra", obj.PrecioCompra);
+                    cmd.Parameters.AddWithValue("Stock", obj.Stock);
+                    cmd.Parameters.AddWithValue("Punto_reposicion", obj.Punto_reposicion);
+                    cmd.Parameters.AddWithValue("Descuento_Distri", obj.Descuento_Distri);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -131,6 +136,11 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.oCategoria.IdCategoria);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
+                    cmd.Parameters.AddWithValue("Codigo_de_barra", obj.Codigo_de_barra ?? "");
+                    cmd.Parameters.AddWithValue("Punto_reposicion", obj.Punto_reposicion);
+                    cmd.Parameters.AddWithValue("Precio_compra", obj.PrecioCompra);
+                    cmd.Parameters.AddWithValue("Descuento_Distri", obj.Descuento_Distri);
+                    cmd.Parameters.AddWithValue("Stock", obj.Stock);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;

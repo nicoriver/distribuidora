@@ -51,6 +51,7 @@
     <Compile Include="CD_Producto.cs" />
     <Compile Include="CD_Proveedor.cs" />
     <Compile Include="CD_Reporte.cs" />
+    <Compile Include="CD_TipoComprobante.cs" />
     <Compile Include="CD_Usuario.cs" />
     <Compile Include="CD_Rol.cs" />
     <Compile Include="CD_Venta.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="CD_Provincia.cs" />
     <Compile Include="CD_Localidad.cs" />
     <Compile Include="CD_Zona.cs" />
+    <Compile Include="CD_Lista.cs" />
+    <Compile Include="CD_Iva.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

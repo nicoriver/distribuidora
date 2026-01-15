@@ -18,5 +18,11 @@ namespace CapaEntidad
         public decimal PrecioVenta { get; set; }
         public bool Estado { get; set; }
         public string FechaRegistro { get; set; }
+        
+        // Nuevos campos
+        public string Codigo_de_barra { get; set; }
+        public int Punto_reposicion { get; set; }
+        public decimal Descuento_Distri { get; set; }
+        public bool ControlaStock { get; set; }
     }
 }

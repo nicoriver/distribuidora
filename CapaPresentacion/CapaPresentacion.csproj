@@ -157,6 +157,12 @@
     <Compile Include="frmVentas.Designer.cs">
       <DependentUpon>frmVentas.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmVentasFiscales.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVentasFiscales.Designer.cs">
+      <DependentUpon>frmVentasFiscales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -192,6 +198,12 @@
     </Compile>
     <Compile Include="Modales\mdProveedor.Designer.cs">
       <DependentUpon>mdProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\mdPreciosLista.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modales\mdPreciosLista.Designer.cs">
+      <DependentUpon>mdPreciosLista.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

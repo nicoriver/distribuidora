@@ -91,7 +91,11 @@ namespace CapaPresentacion
                 Nombre = txtnombre.Text,
                 Descripcion = txtdescripcion.Text,
                 oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(((OpcionCombo)cbocategoria.SelectedItem).Valor) },
-                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false
+                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false,
+                Codigo_de_barra = txtCodigoBarra.Text,
+                Punto_reposicion = Convert.ToInt32(txtPuntoReposicion.Value),
+                Descuento_Distri = string.IsNullOrEmpty(txtDescuentoDistri.Text) ? 0 : Convert.ToDecimal(txtDescuentoDistri.Text),
+                PrecioCompra = string.IsNullOrEmpty(txtPrecioCompra.Text) ? 0 : Convert.ToDecimal(txtPrecioCompra.Text)
             };
 
             if (obj.IdProducto == 0)
@@ -110,7 +114,7 @@ namespace CapaPresentacion
                        ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString(),
                        ((OpcionCombo)cbocategoria.SelectedItem).Texto.ToString(),
                        "0",
-                       "0.00",
+                       txtPrecioCompra.Text,
                        "0.00",
                        ((OpcionCombo)cboestado.SelectedItem).Valor.ToString(),
                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString()
@@ -138,6 +142,7 @@ namespace CapaPresentacion
                     row.Cells["Descripcion"].Value = txtdescripcion.Text;
                     row.Cells["IdCategoria"].Value = ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString();
                     row.Cells["Categoria"].Value = ((OpcionCombo)cbocategoria.SelectedItem).Texto.ToString();
+                    row.Cells["PrecioCompra"].Value = txtPrecioCompra.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboestado.SelectedItem).Texto.ToString();
 
@@ -164,6 +169,10 @@ namespace CapaPresentacion
             txtdescripcion.Text = "";
             cbocategoria.SelectedIndex = 0;
             cboestado.SelectedIndex = 0;
+            txtCodigoBarra.Text = "";
+            txtPuntoReposicion.Value = 0;
+            txtDescuentoDistri.Text = "0";
+            txtPrecioCompra.Text = "0";
 
             txtcodigo.Select();
 
@@ -205,6 +214,7 @@ namespace CapaPresentacion
                     txtcodigo.Text = dgvdata.Rows[indice].Cells["Codigo"].Value.ToString();
                     txtnombre.Text = dgvdata.Rows[indice].Cells["Nombre"].Value.ToString();
                     txtdescripcion.Text = dgvdata.Rows[indice].Cells["Descripcion"].Value.ToString();
+                    txtPrecioCompra.Text = dgvdata.Rows[indice].Cells["PrecioCompra"].Value.ToString();
             
 
                     foreach (OpcionCombo oc in cbocategoria.Items)
@@ -344,6 +354,38 @@ namespace CapaPresentacion
 
                 }
 
+            }
+        }
+
+        private void btnPrecios_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(txtid.Text) == 0)
+            {
+                MessageBox.Show("Seleccione un producto primero", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            int idProducto = Convert.ToInt32(txtid.Text);
+            string nombre = txtnombre.Text;
+            
+            // Buscar el precio de compra del producto seleccionado
+            decimal precioCompra = 0;
+            // Podríamos obtenerlo del grid si fuera confiable, pero mejor buscar la fila seleccionada
+            if (dgvdata.Rows.Count > 0)
+            {
+               foreach (DataGridViewRow row in dgvdata.Rows)
+               {
+                   if (row.Cells["Id"].Value.ToString() == txtid.Text)
+                   {
+                       decimal.TryParse(row.Cells["PrecioCompra"].Value.ToString(), out precioCompra);
+                       break;
+                   }
+               }
+            }
+
+            using (var modal = new Modales.mdPreciosLista(idProducto, nombre, precioCompra))
+            {
+                var result = modal.ShowDialog();
             }
         }
     }
