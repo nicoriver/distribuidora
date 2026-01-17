@@ -15,6 +15,8 @@ namespace CapaEntidad
         public Venta oVentaOriginal { get; set; } // Para notas de crédito
         public string TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }
+        public int PuntoVenta { get; set; }
+        public string FormaPago { get; set; }
         public string DocumentoCliente { get; set; }
         public string NombreCliente { get; set; }
         public decimal MontoPago { get; set; }

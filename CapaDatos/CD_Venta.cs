@@ -249,6 +249,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("IdTipoComprobante", obj.oTipoComprobante.IdTipoComprobante);
                     cmd.Parameters.AddWithValue("IdCliente", obj.oCliente != null ? (object)obj.oCliente.IdCliente : DBNull.Value);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
+                    cmd.Parameters.AddWithValue("PuntoVenta", obj.PuntoVenta);
+                    cmd.Parameters.AddWithValue("FormaPago", obj.FormaPago ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
@@ -269,7 +271,12 @@ namespace CapaDatos
 
                     Respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
-                    idVentaGenerado = Convert.ToInt32(cmd.Parameters["IdVentaResultado"].Value);
+                    
+                    // Verificar si el parámetro tiene valor antes de convertir
+                    if (cmd.Parameters["IdVentaResultado"].Value != DBNull.Value)
+                    {
+                        idVentaGenerado = Convert.ToInt32(cmd.Parameters["IdVentaResultado"].Value);
+                    }
                 }
             }
             catch (Exception ex)

@@ -50,11 +50,31 @@ namespace CapaPresentacion.Modales
             int iColum = e.ColumnIndex;
             if (iRow >= 0 && iColum >= 0)
             {
-                _Cliente = new Cliente()
+                string dni = dgvdata.Rows[iRow].Cells["Documento"].Value.ToString();
+                string nombre = dgvdata.Rows[iRow].Cells["NombreCompleto"].Value.ToString();
+                
+                // Buscar el cliente completo para obtener el IdCliente
+                Cliente clienteCompleto = new CN_Cliente().Listar()
+                    .FirstOrDefault(c => c.Dni == dni && c.Estado == true);
+                
+                if (clienteCompleto != null)
                 {
-                    Dni = dgvdata.Rows[iRow].Cells["Documento"].Value.ToString(),
-                    Nombre = dgvdata.Rows[iRow].Cells["NombreCompleto"].Value.ToString()
-                };
+                    _Cliente = new Cliente()
+                    {
+                        IdCliente = clienteCompleto.IdCliente,
+                        Dni = dni,
+                        Nombre = nombre
+                    };
+                }
+                else
+                {
+                    _Cliente = new Cliente()
+                    {
+                        Dni = dni,
+                        Nombre = nombre
+                    };
+                }
+                
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

@@ -96,6 +96,8 @@ namespace CapaPresentacion
                 Punto_reposicion = Convert.ToInt32(txtPuntoReposicion.Value),
                 Descuento_Distri = string.IsNullOrEmpty(txtDescuentoDistri.Text) ? 0 : Convert.ToDecimal(txtDescuentoDistri.Text),
                 PrecioCompra = string.IsNullOrEmpty(txtPrecioCompra.Text) ? 0 : Convert.ToDecimal(txtPrecioCompra.Text)
+                // TODO: Agregar ControlaStock cuando se arregle el Designer
+                // ControlaStock = chkControlaStock.Checked
             };
 
             if (obj.IdProducto == 0)
@@ -173,6 +175,8 @@ namespace CapaPresentacion
             txtPuntoReposicion.Value = 0;
             txtDescuentoDistri.Text = "0";
             txtPrecioCompra.Text = "0";
+            // TODO: Descomentar cuando se arregle el Designer
+            // chkControlaStock.Checked = true; // Por defecto controla stock
 
             txtcodigo.Select();
 

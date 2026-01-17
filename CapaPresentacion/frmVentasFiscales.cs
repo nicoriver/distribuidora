@@ -1,6 +1,7 @@
 using CapaEntidad;
 using CapaNegocio;
 using CapaPresentacion.Utilidades;
+using CapaPresentacion.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +17,7 @@ namespace CapaPresentacion
         private TipoComprobante _TipoComprobanteSeleccionado;
         private int _IdListaPrecioActual = 2; // Por defecto Minorista
         private decimal _PorcentajeIVAGeneral = 21; // IVA por defecto
+        private int _NumeroComprobanteActual = 0; // Número sin el punto de venta
 
         public frmVentasFiscales(Usuario oUsuario = null)
         {
@@ -25,15 +27,30 @@ namespace CapaPresentacion
 
         private void frmVentasFiscales_Load(object sender, EventArgs e)
         {
-            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            txtNumeroDocumento.Text = string.Format("{0:00000}", new CN_Venta().ObtenerCorrelativo());
+            // Configurar fecha a día anterior
+            dtpFecha.Value = DateTime.Now.AddDays(-1);
 
             // Configurar DataGridView PRIMERO
             ConfigurarDataGridView();
             AgregarFilaVacia();
 
-            // Cargar tipos de comprobantes DESPUÉS
+            // Cargar puntos de venta (0001 a 0005)
+            for (int i = 1; i <= 5; i++)
+            {
+                cboPuntoVenta.Items.Add(new OpcionCombo()
+                {
+                    Valor = i,
+                    Texto = string.Format("{0:0000}", i)
+                });
+            }
+            cboPuntoVenta.DisplayMember = "Texto";
+            cboPuntoVenta.ValueMember = "Valor";
+            cboPuntoVenta.SelectedIndex = 0;
+
+            // Cargar tipos de comprobantes
             List<TipoComprobante> listaTipos = new CN_TipoComprobante().ListarParaVentas();
+            int indexRemito = -1;
+            int currentIndex = 0;
             foreach (TipoComprobante tipo in listaTipos)
             {
                 cboTipoComprobante.Items.Add(new OpcionCombo()
@@ -41,10 +58,26 @@ namespace CapaPresentacion
                     Valor = tipo.IdTipoComprobante,
                     Texto = tipo.Descripcion
                 });
+                // Buscar índice de "Remito"
+                if (tipo.Descripcion.ToUpper().Contains("REMITO"))
+                {
+                    indexRemito = currentIndex;
+                }
+                currentIndex++;
             }
             cboTipoComprobante.DisplayMember = "Texto";
             cboTipoComprobante.ValueMember = "Valor";
-            cboTipoComprobante.SelectedIndex = 0; // Esto dispara el evento, pero ahora las columnas ya existen
+            cboTipoComprobante.SelectedIndex = indexRemito >= 0 ? indexRemito : 0;
+
+            // Cargar formas de pago
+            cboFormaPago.Items.Add("Contado");
+            cboFormaPago.Items.Add("Tarjeta");
+            cboFormaPago.Items.Add("Transferencia");
+            cboFormaPago.Items.Add("Billeteras");
+            cboFormaPago.SelectedIndex = 0; // Contado por defecto
+
+            // Actualizar número de documento
+            ActualizarNumeroDocumento();
         }
 
         private void ConfigurarDataGridView()
@@ -61,7 +94,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colCodigo = new DataGridViewTextBoxColumn();
             colCodigo.Name = "Codigo";
             colCodigo.HeaderText = "Código";
-            colCodigo.Width = 100;
+            colCodigo.Width = 120;
             colCodigo.ReadOnly = false;
             dgvProductos.Columns.Add(colCodigo);
 
@@ -76,7 +109,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colProducto = new DataGridViewTextBoxColumn();
             colProducto.Name = "Producto";
             colProducto.HeaderText = "Producto";
-            colProducto.Width = 250;
+            colProducto.Width = 300;
             colProducto.ReadOnly = true;
             dgvProductos.Columns.Add(colProducto);
 
@@ -84,7 +117,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colPrecio = new DataGridViewTextBoxColumn();
             colPrecio.Name = "Precio";
             colPrecio.HeaderText = "Precio";
-            colPrecio.Width = 80;
+            colPrecio.Width = 100;
             colPrecio.ReadOnly = true;
             colPrecio.DefaultCellStyle.Format = "N2";
             colPrecio.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -94,7 +127,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colCantidad = new DataGridViewTextBoxColumn();
             colCantidad.Name = "Cantidad";
             colCantidad.HeaderText = "Cantidad";
-            colCantidad.Width = 80;
+            colCantidad.Width = 90;
             colCantidad.ReadOnly = false;
             colCantidad.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dgvProductos.Columns.Add(colCantidad);
@@ -103,7 +136,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colStock = new DataGridViewTextBoxColumn();
             colStock.Name = "Stock";
             colStock.HeaderText = "Stock";
-            colStock.Width = 70;
+            colStock.Width = 80;
             colStock.ReadOnly = true;
             colStock.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dgvProductos.Columns.Add(colStock);
@@ -118,7 +151,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colPorcentajeIVA = new DataGridViewTextBoxColumn();
             colPorcentajeIVA.Name = "PorcentajeIVA";
             colPorcentajeIVA.HeaderText = "IVA %";
-            colPorcentajeIVA.Width = 60;
+            colPorcentajeIVA.Width = 70;
             colPorcentajeIVA.ReadOnly = true;
             colPorcentajeIVA.DefaultCellStyle.Format = "N2";
             colPorcentajeIVA.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -128,7 +161,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colImporteIVA = new DataGridViewTextBoxColumn();
             colImporteIVA.Name = "ImporteIVA";
             colImporteIVA.HeaderText = "Importe IVA";
-            colImporteIVA.Width = 90;
+            colImporteIVA.Width = 110;
             colImporteIVA.ReadOnly = true;
             colImporteIVA.DefaultCellStyle.Format = "N2";
             colImporteIVA.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -138,7 +171,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colSubTotal = new DataGridViewTextBoxColumn();
             colSubTotal.Name = "SubTotal";
             colSubTotal.HeaderText = "Subtotal";
-            colSubTotal.Width = 100;
+            colSubTotal.Width = 120;
             colSubTotal.ReadOnly = true;
             colSubTotal.DefaultCellStyle.Format = "N2";
             colSubTotal.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -148,7 +181,7 @@ namespace CapaPresentacion
             DataGridViewTextBoxColumn colTotal = new DataGridViewTextBoxColumn();
             colTotal.Name = "Total";
             colTotal.HeaderText = "Total";
-            colTotal.Width = 100;
+            colTotal.Width = 120;
             colTotal.ReadOnly = true;
             colTotal.DefaultCellStyle.Format = "N2";
             colTotal.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -512,7 +545,10 @@ namespace CapaPresentacion
             {
                 oUsuario = new Usuario() { IdUsuario = _Usuario.IdUsuario },
                 oTipoComprobante = _TipoComprobanteSeleccionado,
-                NumeroDocumento = txtNumeroDocumento.Text,
+                oCliente = new Cliente { IdCliente = int.Parse(txtIdCliente.Text) },
+                NumeroDocumento = string.Format("{0:00000}", _NumeroComprobanteActual), // Solo el número
+                PuntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor),
+                FormaPago = cboFormaPago.SelectedItem.ToString(),
                 DocumentoCliente = txtDocumentoCliente.Text,
                 NombreCliente = txtNombreCliente.Text,
                 MontoPago = decimal.Parse(txtPagaCon.Text == "" ? "0" : txtPagaCon.Text),
@@ -529,8 +565,20 @@ namespace CapaPresentacion
 
             if (resultado)
             {
-                MessageBox.Show($"Venta registrada exitosamente\nNúmero: {txtNumeroDocumento.Text}",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Guardar número de documento antes de limpiar
+                string numeroDocumento = txtNumeroDocumento.Text;
+                // Preguntar si desea imprimir el comprobante
+                DialogResult respuesta = MessageBox.Show(
+                    $"Venta registrada exitosamente\nNúmero: {numeroDocumento}\n\n¿Desea imprimir el comprobante?",
+                    "Venta Exitosa",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                if (respuesta == DialogResult.Yes)
+                {
+                    // Imprimir el comprobante antes de limpiar
+                    ImprimirComprobanteActual(venta, detalle);
+                }
+                // Limpiar formulario para nueva carga
                 LimpiarFormulario();
             }
             else
@@ -540,6 +588,52 @@ namespace CapaPresentacion
             }
         }
 
+        private void ImprimirComprobanteActual(Venta venta, DataTable detalle)
+        {
+            try
+            {
+                // Convertir DataTable a List<Detalle_Venta> para el PDF
+                venta.oDetalle_Venta = new List<Detalle_Venta>();
+                foreach (DataRow row in detalle.Rows)
+                {
+                    // Buscar el producto en el grid para obtener código y nombre
+                    DataGridViewRow gridRow = null;
+                    foreach (DataGridViewRow gRow in dgvProductos.Rows)
+                    {
+                        if (gRow.Cells["IdProducto"].Value != null &&
+                            gRow.Cells["IdProducto"].Value.ToString() == row["IdProducto"].ToString())
+                        {
+                            gridRow = gRow;
+                            break;
+                        }
+                    }
+                    if (gridRow != null)
+                    {
+                        Detalle_Venta detalleVenta = new Detalle_Venta()
+                        {
+                            oProducto = new Producto()
+                            {
+                                Codigo = gridRow.Cells["Codigo"].Value?.ToString() ?? "",
+                                Nombre = gridRow.Cells["Producto"].Value?.ToString() ?? ""
+                            },
+                            Cantidad = Convert.ToInt32(row["Cantidad"]),
+                            PrecioVenta = Convert.ToDecimal(row["PrecioVenta"]),
+                            PorcentajeIVA = Convert.ToDecimal(row["PorcentajeIVA"]),
+                            SubTotal = Convert.ToDecimal(row["SubTotal"])
+                        };
+                        venta.oDetalle_Venta.Add(detalleVenta);
+                    }
+                }
+                // Generar y mostrar el PDF
+                GeneradorComprobantes generador = new GeneradorComprobantes();
+                generador.GenerarYMostrarVistaPrevia(venta);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar comprobante: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void LimpiarProductos()
         {
             dgvProductos.Rows.Clear();
@@ -549,13 +643,100 @@ namespace CapaPresentacion
 
         private void LimpiarFormulario()
         {
+            txtIdCliente.Text = "";
             txtDocumentoCliente.Text = "";
             txtNombreCliente.Text = "";
             txtPagaCon.Text = "";
             txtCambio.Text = "0.00";
-            txtNumeroDocumento.Text = string.Format("{0:00000}", new CN_Venta().ObtenerCorrelativo());
+            ActualizarNumeroDocumento();
             LimpiarProductos();
-            txtDocumentoCliente.Focus();
+            txtIdCliente.Focus();
         }
+
+        private void ActualizarNumeroDocumento()
+        {
+            if (cboPuntoVenta.SelectedItem == null) return;
+            
+            int puntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor);
+            _NumeroComprobanteActual = new CN_Venta().ObtenerCorrelativo();
+            
+            // Mostrar solo el número en el campo
+            txtNumeroDocumento.Text = string.Format("{0:00000}", _NumeroComprobanteActual);
+        }
+
+        private void cboPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarNumeroDocumento();
+        }
+
+        private void txtIdCliente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                string idClienteText = txtIdCliente.Text.Trim();
+                if (string.IsNullOrEmpty(idClienteText))
+                    return;
+
+                int idCliente;
+                if (!int.TryParse(idClienteText, out idCliente))
+                {
+                    MessageBox.Show("El ID del cliente debe ser un número", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtIdCliente.Focus();
+                    return;
+                }
+
+                Cliente cliente = new CN_Cliente().Listar()
+                    .FirstOrDefault(c => c.IdCliente == idCliente && c.Estado == true);
+
+                if (cliente == null)
+                {
+                    MessageBox.Show($"No se encontró un cliente activo con ID {idCliente}", "Cliente no encontrado",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtIdCliente.Focus();
+                    return;
+                }
+
+                // Cargar datos del cliente
+                txtDocumentoCliente.Text = cliente.Dni;
+                txtNombreCliente.Text = !string.IsNullOrEmpty(cliente.RazonSocial) 
+                    ? cliente.RazonSocial 
+                    : $"{cliente.Apellido} {cliente.Nombre}".Trim();
+            }
+        }
+
+        private void btnBuscarCliente_Click(object sender, EventArgs e)
+        {
+            using (var modal = new Modales.mdCliente())
+            {
+                var result = modal.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    Cliente clienteSeleccionado = modal._Cliente;
+                    if (clienteSeleccionado != null)
+                    {
+                        txtIdCliente.Text = clienteSeleccionado.IdCliente.ToString();
+                        txtDocumentoCliente.Text = clienteSeleccionado.Dni;
+                        txtNombreCliente.Text = clienteSeleccionado.Nombre;
+                    }
+                }
+            }
+        }
+        
+
+
+        private void btnBuscarProducto_Click(object sender, EventArgs e)
+        {
+            using (var modal = new Modales.mdProducto())
+            {
+                modal.ShowDialog();
+                // Solo para consulta, no se agrega al grid
+            }
+        }
+
+     
     }
 }
