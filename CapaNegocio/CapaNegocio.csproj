@@ -53,6 +53,7 @@
     <Compile Include="CN_TipoComprobante.cs" />
     <Compile Include="CN_Usuario.cs" />
     <Compile Include="CN_Venta.cs" />
+    <Compile Include="CN_Venta_Extensiones.cs" />
     <Compile Include="CN__Producto.cs" />
     <Compile Include="CN_Provincia.cs" />
     <Compile Include="CN_Localidad.cs" />

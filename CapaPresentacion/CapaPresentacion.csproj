@@ -118,6 +118,12 @@
     <Compile Include="frmDetalleVenta.Designer.cs">
       <DependentUpon>frmDetalleVenta.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDevoluciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDevoluciones.Designer.cs">
+      <DependentUpon>frmDevoluciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmNegocio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,6 +239,9 @@
     <EmbeddedResource Include="frmDetalleVenta.resx">
       <DependentUpon>frmDetalleVenta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDevoluciones.resx">
+      <DependentUpon>frmDevoluciones.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmNegocio.resx">
       <DependentUpon>frmNegocio.cs</DependentUpon>
     </EmbeddedResource>
@@ -256,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmVentas.resx">
       <DependentUpon>frmVentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVentasFiscales.resx">
+      <DependentUpon>frmVentasFiscales.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>

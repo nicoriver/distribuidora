@@ -1,4 +1,4 @@
-ï»¿using CapaDatos;
+using CapaDatos;
 using CapaEntidad;
 using System;
 using System.Collections.Generic;
@@ -25,6 +25,11 @@ namespace CapaNegocio
         {
             return objcd_venta.ObtenerCorrelativo();
         }
+        //public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
+        //{
+        //    return objcd_venta.ObtenerCorrelativoPorTipo(idTipoComprobante, puntoVenta);
+        //}
+
 
         public bool Registrar(Venta obj, DataTable DetalleVenta, out string Mensaje)
         {
@@ -44,13 +49,23 @@ namespace CapaNegocio
 
 
         // =============================================
-        // MÃ©todos para Ventas Fiscales
-        // =============================================
+        // Métodos para Ventas Fiscales
+        //// =============================================
+        //public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
+        //{
+        //    return objcd_venta.ObtenerCorrelativoPorTipo(idTipoComprobante, puntoVenta);
+        //}
+
 
         public bool RegistrarVentaFiscal(Venta obj, DataTable DetalleVenta, out int idVentaGenerado, out string Mensaje)
         {
             return objcd_venta.RegistrarVentaFiscal(obj, DetalleVenta, out idVentaGenerado, out Mensaje);
         }
+        public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
+        {
+            return objcd_venta.ObtenerCorrelativoPorTipo(idTipoComprobante, puntoVenta);
+        }
+
 
         public bool RegistrarNotaCredito(Venta obj, DataTable DetalleVenta, out int idNotaCreditoGenerado, out string Mensaje)
         {
@@ -154,7 +169,7 @@ namespace CapaNegocio
 
             if (string.IsNullOrWhiteSpace(obj.NumeroDocumento))
             {
-                mensaje = "Debe ingresar un nÃºmero de documento";
+                mensaje = "Debe ingresar un número de documento";
                 return false;
             }
 

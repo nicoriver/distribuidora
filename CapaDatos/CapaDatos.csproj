@@ -64,6 +64,7 @@
     <Compile Include="CD_Usuario.cs" />
     <Compile Include="CD_Rol.cs" />
     <Compile Include="CD_Venta.cs" />
+    <Compile Include="CD_Venta_Extensiones.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="CD_Provincia.cs" />
     <Compile Include="CD_Localidad.cs" />

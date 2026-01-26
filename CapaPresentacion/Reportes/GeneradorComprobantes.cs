@@ -158,8 +158,9 @@ namespace CapaPresentacion.Reportes
                 });
 
                 column.Item().PaddingTop(20);
-
                 // Totales
+                // Determinar si debe mostrar IVA discriminado (solo Factura A)
+                bool mostrarIVADiscriminado = venta.oTipoComprobante?.Codigo == "A";
                 column.Item().AlignRight().Column(col =>
                 {
                     col.Item().Row(r =>
@@ -167,25 +168,39 @@ namespace CapaPresentacion.Reportes
                         r.ConstantItem(150).Text("Subtotal:").FontSize(11);
                         r.ConstantItem(100).AlignRight().Text($"${venta.SubTotal:N2}").FontSize(11);
                     });
+                    // Interés si existe
+                    if (venta.PorcentajeInteres > 0 || venta.MontoInteres > 0)
+                    {
+                        decimal porcentaje = venta.PorcentajeInteres;
+                        decimal monto = venta.MontoInteres;
 
-                    if (venta.TotalIVA > 0)
+                        col.Item().Row(r =>
+                        {
+                            r.ConstantItem(150).Text($"Interés ({porcentaje:N1}%):").FontSize(11);
+                            r.ConstantItem(100).AlignRight().Text($"${monto:N2}").FontSize(11);
+                        });
+                    }
+                    // Descuento si existe
+                    if (venta.TotalDescuento > 0 || venta.PorcentajeDescuento > 0)
+                    {
+                        decimal porcentaje = venta.PorcentajeDescuento;
+                        decimal monto = venta.TotalDescuento;
+
+                        col.Item().Row(r =>
+                        {
+                            r.ConstantItem(150).Text($"Descuento ({porcentaje:N1}%):").FontSize(11);
+                            r.ConstantItem(100).AlignRight().Text($"-${monto:N2}").FontSize(11);
+                        });
+                    }
+                    // IVA solo para Factura A
+                    if (mostrarIVADiscriminado && venta.TotalIVA > 0)
                     {
                         col.Item().Row(r =>
                         {
-                            r.ConstantItem(150).Text("IVA:").FontSize(11);
+                            r.ConstantItem(150).Text("IVA (21%):").FontSize(11);
                             r.ConstantItem(100).AlignRight().Text($"${venta.TotalIVA:N2}").FontSize(11);
                         });
                     }
-
-                    if (venta.TotalDescuento > 0)
-                    {
-                        col.Item().Row(r =>
-                        {
-                            r.ConstantItem(150).Text("Descuento:").FontSize(11);
-                            r.ConstantItem(100).AlignRight().Text($"-${venta.TotalDescuento:N2}").FontSize(11);
-                        });
-                    }
-
                     col.Item().PaddingTop(5).Border(1).BorderColor(Colors.Black)
                         .Padding(5).Row(r =>
                         {

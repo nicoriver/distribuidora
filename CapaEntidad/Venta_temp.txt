@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,6 @@ namespace CapaEntidad
         public TipoComprobante oTipoComprobante { get; set; }
         public Cliente oCliente { get; set; }
         public Venta oVentaOriginal { get; set; } // Para notas de crédito
-        public int IdVentaOriginal { get; set; } // ID de la venta original para notas de crédito
         public string TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }
         public int PuntoVenta { get; set; }
@@ -34,3 +33,4 @@ namespace CapaEntidad
         public string FechaRegistro { get; set; }
     }
 }
+

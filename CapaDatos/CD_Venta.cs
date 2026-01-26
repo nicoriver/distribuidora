@@ -1,4 +1,4 @@
-Ôªøusing CapaEntidad;
+using CapaEntidad;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,6 +38,36 @@ namespace CapaDatos
             }
             return idcorrelativo;
         }
+        public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
+        {
+            int idcorrelativo = 0;
+
+            using (SqlConnection oconexion = Conexion.GetConnection())
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT COUNT(*) + 1 FROM VENTA");
+                    query.AppendLine("WHERE IdTipoComprobante = @IdTipoComprobante");
+                    query.AppendLine("AND PuntoVenta = @PuntoVenta");
+                    
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@IdTipoComprobante", idTipoComprobante);
+                    cmd.Parameters.AddWithValue("@PuntoVenta", puntoVenta);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+
+                    idcorrelativo = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    idcorrelativo = 0;
+                }
+            }
+            return idcorrelativo;
+        }
+
 
         public bool RestarStock(int idproducto, int cantidad)
         {
@@ -231,7 +261,7 @@ namespace CapaDatos
 
 
         // =============================================
-        // M√©todos para Ventas Fiscales
+        // MÈtodos para Ventas Fiscales
         // =============================================
 
         public bool RegistrarVentaFiscal(Venta obj, DataTable DetalleVenta, out int idVentaGenerado, out string Mensaje)
@@ -247,6 +277,8 @@ namespace CapaDatos
                     SqlCommand cmd = new SqlCommand("sp_RegistrarVentaFiscal", oconexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("IdTipoComprobante", obj.oTipoComprobante.IdTipoComprobante);
+                    cmd.Parameters.AddWithValue("IdTipoDocumento", obj.oTipoComprobante.Descripcion);
+                    
                     cmd.Parameters.AddWithValue("IdCliente", obj.oCliente != null ? (object)obj.oCliente.IdCliente : DBNull.Value);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("PuntoVenta", obj.PuntoVenta);
@@ -272,7 +304,7 @@ namespace CapaDatos
                     Respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
                     
-                    // Verificar si el par√°metro tiene valor antes de convertir
+                    // Verificar si el par·metro tiene valor antes de convertir
                     if (cmd.Parameters["IdVentaResultado"].Value != DBNull.Value)
                     {
                         idVentaGenerado = Convert.ToInt32(cmd.Parameters["IdVentaResultado"].Value);

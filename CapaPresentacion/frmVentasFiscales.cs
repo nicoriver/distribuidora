@@ -17,7 +17,7 @@ namespace CapaPresentacion
         private TipoComprobante _TipoComprobanteSeleccionado;
         private int _IdListaPrecioActual = 2; // Por defecto Minorista
         private decimal _PorcentajeIVAGeneral = 21; // IVA por defecto
-        private int _NumeroComprobanteActual = 0; // NÃºmero sin el punto de venta
+        private int _NumeroComprobanteActual = 0; // Numero sin el punto de venta
 
         public frmVentasFiscales(Usuario oUsuario = null)
         {
@@ -93,7 +93,7 @@ namespace CapaPresentacion
             // Columna CÃ³digo (editable)
             DataGridViewTextBoxColumn colCodigo = new DataGridViewTextBoxColumn();
             colCodigo.Name = "Codigo";
-            colCodigo.HeaderText = "CÃ³digo";
+            colCodigo.HeaderText = "Codigo";
             colCodigo.Width = 120;
             colCodigo.ReadOnly = false;
             dgvProductos.Columns.Add(colCodigo);
@@ -210,6 +210,7 @@ namespace CapaPresentacion
 
             int idTipoComprobante = Convert.ToInt32(((OpcionCombo)cboTipoComprobante.SelectedItem).Valor);
             _TipoComprobanteSeleccionado = new CN_TipoComprobante().ObtenerPorId(idTipoComprobante);
+            ActualizarNumeroDocumento();  // ? Agregar esta línea
             _IdListaPrecioActual = _TipoComprobanteSeleccionado.IdListaPrecio;
 
             // Verificar que las columnas existan antes de acceder
@@ -231,7 +232,7 @@ namespace CapaPresentacion
             if (dgvProductos.Rows.Count > 1)
             {
                 var result = MessageBox.Show(
-                    "Al cambiar el tipo de comprobante se limpiarÃ¡n los productos. Â¿Continuar?",
+                    "Al cambiar el tipo de comprobante se limpiaran los productos. ¿Continuar?",
                     "Advertencia",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
@@ -483,7 +484,7 @@ namespace CapaPresentacion
         {
             if (string.IsNullOrWhiteSpace(txtDocumentoCliente.Text))
             {
-                MessageBox.Show("Ingrese el documento del cliente", "ValidaciÃ³n",
+                MessageBox.Show("Ingrese el documento del cliente", "Validacion",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtDocumentoCliente.Focus();
                 return;
@@ -491,7 +492,7 @@ namespace CapaPresentacion
 
             if (string.IsNullOrWhiteSpace(txtNombreCliente.Text))
             {
-                MessageBox.Show("Ingrese el nombre del cliente", "ValidaciÃ³n",
+                MessageBox.Show("Ingrese el nombre del cliente", "Validacion",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNombreCliente.Focus();
                 return;
@@ -502,7 +503,7 @@ namespace CapaPresentacion
 
             if (productosValidos == 0)
             {
-                MessageBox.Show("Debe agregar al menos un producto", "ValidaciÃ³n",
+                MessageBox.Show("Debe agregar al menos un producto", "Validacion",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -545,8 +546,11 @@ namespace CapaPresentacion
             {
                 oUsuario = new Usuario() { IdUsuario = _Usuario.IdUsuario },
                 oTipoComprobante = _TipoComprobanteSeleccionado,
+               
                 oCliente = new Cliente { IdCliente = int.Parse(txtIdCliente.Text) },
-                NumeroDocumento = string.Format("{0:00000}", _NumeroComprobanteActual), // Solo el nÃºmero
+
+                // NumeroDocumento = string.Format("{0:00000}", _NumeroComprobanteActual), // Solo el nÃºmero
+                NumeroDocumento = string.Format("{0:00000}", Convert.ToInt32(txtNumeroDocumento.Text)), // Solo el nÃºmero
                 PuntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor),
                 FormaPago = cboFormaPago.SelectedItem.ToString(),
                 DocumentoCliente = txtDocumentoCliente.Text,
@@ -569,7 +573,7 @@ namespace CapaPresentacion
                 string numeroDocumento = txtNumeroDocumento.Text;
                 // Preguntar si desea imprimir el comprobante
                 DialogResult respuesta = MessageBox.Show(
-                    $"Venta registrada exitosamente\nNÃºmero: {numeroDocumento}\n\nÂ¿Desea imprimir el comprobante?",
+                    $"Venta registrada exitosamente\nNumero: {numeroDocumento}\n\n¿Desea imprimir el comprobante?",
                     "Venta Exitosa",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
@@ -655,78 +659,40 @@ namespace CapaPresentacion
 
         private void ActualizarNumeroDocumento()
         {
-            if (cboPuntoVenta.SelectedItem == null) return;
-            
-            int puntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor);
-            _NumeroComprobanteActual = new CN_Venta().ObtenerCorrelativo();
-            
-            // Mostrar solo el nÃºmero en el campo
-            txtNumeroDocumento.Text = string.Format("{0:00000}", _NumeroComprobanteActual);
-        }
-
-        private void cboPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActualizarNumeroDocumento();
-        }
-
-        private void txtIdCliente_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+            // Verificar que haya tipo de comprobante seleccionado
+            if (_TipoComprobanteSeleccionado == null)
             {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
+                return;
+            }
 
-                string idClienteText = txtIdCliente.Text.Trim();
-                if (string.IsNullOrEmpty(idClienteText))
-                    return;
+            // Verificar que haya punto de venta seleccionado
+            if (cboPuntoVenta.SelectedItem == null)
+            {
+                return;
+            }
 
-                int idCliente;
-                if (!int.TryParse(idClienteText, out idCliente))
-                {
-                    MessageBox.Show("El ID del cliente debe ser un nÃºmero", "ValidaciÃ³n",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtIdCliente.Focus();
-                    return;
-                }
+            try
+            {
+                // Obtener punto de venta
+                int puntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor);
 
-                Cliente cliente = new CN_Cliente().Listar()
-                    .FirstOrDefault(c => c.IdCliente == idCliente && c.Estado == true);
+                // Obtener siguiente número para este tipo de comprobante y punto de venta
+                int numeroDocumento = new CN_Venta().ObtenerCorrelativoPorTipo(
+                    _TipoComprobanteSeleccionado.IdTipoComprobante,
+                    puntoVenta);
 
-                if (cliente == null)
-                {
-                    MessageBox.Show($"No se encontrÃ³ un cliente activo con ID {idCliente}", "Cliente no encontrado",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtIdCliente.Focus();
-                    return;
-                }
-
-                // Cargar datos del cliente
-                txtDocumentoCliente.Text = cliente.Dni;
-                txtNombreCliente.Text = !string.IsNullOrEmpty(cliente.RazonSocial) 
-                    ? cliente.RazonSocial 
-                    : $"{cliente.Apellido} {cliente.Nombre}".Trim();
+                // Actualizar el label o textbox donde muestras el número
+                // Ajusta según tu formulario:
+                txtNumeroDocumento.Text = string.Format("{0:00000000}", numeroDocumento);
+                // O si usas TextBox:
+                // txtNumeroDocumento.Text = string.Format("{0:00000000}", numeroDocumento);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener número de documento: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void btnBuscarCliente_Click(object sender, EventArgs e)
-        {
-            using (var modal = new Modales.mdCliente())
-            {
-                var result = modal.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    Cliente clienteSeleccionado = modal._Cliente;
-                    if (clienteSeleccionado != null)
-                    {
-                        txtIdCliente.Text = clienteSeleccionado.IdCliente.ToString();
-                        txtDocumentoCliente.Text = clienteSeleccionado.Dni;
-                        txtNombreCliente.Text = clienteSeleccionado.Nombre;
-                    }
-                }
-            }
-        }
-        
-
 
         private void btnBuscarProducto_Click(object sender, EventArgs e)
         {
@@ -736,7 +702,56 @@ namespace CapaPresentacion
                 // Solo para consulta, no se agrega al grid
             }
         }
+  
+        private void cboPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Este evento se dispara cuando cambia el punto de venta
+            // Aquí puedes actualizar el número de documento si lo necesitas
+        }
 
-     
+        private void txtIdCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void txtIdCliente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Verificar que haya un ID válido
+                if (string.IsNullOrWhiteSpace(txtIdCliente.Text))
+                {
+                    return;
+                }
+
+                try
+                {
+                    int idCliente = Convert.ToInt32(txtIdCliente.Text);
+
+                    // Buscar el cliente
+                    Cliente cliente = new CN_Cliente().Listar().FirstOrDefault(x => x.IdCliente == idCliente);
+
+                    if (cliente != null)
+                    {
+                        // Llenar los datos del cliente
+                        txtDocumentoCliente.Text = cliente.Cuit;
+                        txtNombreCliente.Text = cliente.Nombre;
+
+                        // Mover el foco al siguiente control
+                        txtDocumentoCliente.Focus();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cliente no encontrado", "Aviso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        txtIdCliente.SelectAll();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al buscar cliente: {ex.Message}",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

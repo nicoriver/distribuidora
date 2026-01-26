@@ -153,5 +153,10 @@ namespace CapaPresentacion
                 this.Close();
             }
         }
+
+        private void devolucionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(menuventas, new frmDevoluciones(1));
+        }
     }
 }
