@@ -879,7 +879,7 @@
             // frmClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3056, 1454);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnbuscar);

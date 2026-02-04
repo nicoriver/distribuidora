@@ -368,7 +368,7 @@ namespace CapaPresentacion
 
 
             int idcorrelativo = new CN_Venta().ObtenerCorrelativo();
-            string numeroDocumento = string.Format("{0:00000}", idcorrelativo);
+            string numeroDocumento = string.Format("{0:0000000000}", idcorrelativo);
             calcularcambio();
 
             Venta oVenta = new Venta()

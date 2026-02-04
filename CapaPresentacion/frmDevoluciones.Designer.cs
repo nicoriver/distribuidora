@@ -1,4 +1,4 @@
-namespace CapaPresentacion
+﻿namespace CapaPresentacion
 {
     partial class frmDevoluciones
     {
@@ -581,7 +581,7 @@ namespace CapaPresentacion
             // frmDevoluciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3200, 1717);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnLimpiar);
@@ -657,3 +657,4 @@ namespace CapaPresentacion
         private System.Windows.Forms.ComboBox cboTipocomprobanteD;
     }
 }
+

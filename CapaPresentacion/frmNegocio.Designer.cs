@@ -207,7 +207,7 @@
             // frmNegocio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(2240, 1023);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label9);

@@ -1,4 +1,4 @@
-namespace CapaPresentacion
+ï»¿namespace CapaPresentacion
 {
     partial class frmProducto
     {
@@ -572,7 +572,7 @@ namespace CapaPresentacion
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(228, 32);
             this.label5.TabIndex = 212;
-            this.label5.Text = "Código de Barra:";
+            this.label5.Text = "Cï¿½digo de Barra:";
             // 
             // txtPuntoReposicion
             // 
@@ -596,7 +596,7 @@ namespace CapaPresentacion
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(285, 32);
             this.label6.TabIndex = 214;
-            this.label6.Text = "Punto de Reposición:";
+            this.label6.Text = "Punto de Reposiciï¿½n:";
             // 
             // txtDescuentoDistri
             // 
@@ -643,7 +643,7 @@ namespace CapaPresentacion
             // frmProducto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3064, 1393);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.txtPrecioCompra);
@@ -740,3 +740,4 @@ namespace CapaPresentacion
         private System.Windows.Forms.Label label13;
     }
 }
+

@@ -1,5 +1,6 @@
 using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.Reportes;
 using CapaPresentacion.Utilidades;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace CapaPresentacion
             // Deshabilitar botón guardar inicialmente
             btnGuardar.Enabled = false;
             // Cargar puntos de venta (0001 a 0005)
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 1; i++)
             {
                 cboPtoVentaD.Items.Add(new OpcionCombo()
                 {
@@ -132,6 +133,8 @@ namespace CapaPresentacion
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+
+            
             string numeroDocumento = txtNumeroComprobanteOriginal.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(numeroDocumento))
@@ -296,6 +299,8 @@ namespace CapaPresentacion
                 // Recalcular totales
                 CalcularTotales();
             }
+
+
         }
 
         private void RecalcularFila(DataGridViewRow row, int cantidadNueva, Detalle_Venta itemOriginal)
@@ -463,8 +468,22 @@ namespace CapaPresentacion
 
                 if (imprimirResultado == DialogResult.Yes)
                 {
-                    // TODO: Implementar impresión de NC
-                    MessageBox.Show("Funcionalidad de impresión pendiente de implementar", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    try
+                    {
+                        // Obtener nota de crédito completa
+                        Venta notaCreditoCompleta = new CN_Venta().ObtenerVentaCompleta(txtNumeroNC.Text);
+
+                        if (notaCreditoCompleta != null && notaCreditoCompleta.IdVenta > 0)
+                        {
+                            GeneradorComprobantes generador = new GeneradorComprobantes();
+                            generador.GenerarYMostrarVistaPrevia(notaCreditoCompleta);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al imprimir: {ex.Message}",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
                 // Limpiar formulario

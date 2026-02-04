@@ -35,7 +35,9 @@ namespace CapaDatos
                     query.AppendLine("       tc.DiscriminaIVA, tc.EsNotaCredito, tc.Estado as EstadoTipoComprobante");
                     query.AppendLine("FROM VENTA v");
                     query.AppendLine("INNER JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");
-                    query.AppendLine("WHERE v.NumeroDocumento = @NumeroDocumento");
+                    //query.AppendLine("WHERE v.NumeroDocumento = @NumeroDocumento");
+                    query.AppendLine("WHERE TRY_CONVERT(BIGINT, v.NumeroDocumento) = TRY_CONVERT(BIGINT, @NumeroDocumento)");
+
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@NumeroDocumento", numeroDocumento);
@@ -116,7 +118,10 @@ namespace CapaDatos
                     query.AppendLine("       tc.DiscriminaIVA, tc.EsNotaCredito, tc.Estado as EstadoTipoComprobante");
                     query.AppendLine("FROM VENTA v");
                     query.AppendLine("INNER JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");
-                    query.AppendLine("WHERE v.NumeroDocumento = @NumeroDocumento AND v.IdTipoComprobante = @tipoComprobante and v.PuntoVenta = @ptoVenta ");
+                   // query.AppendLine("WHERE v.NumeroDocumento = @NumeroDocumento AND v.IdTipoComprobante = @tipoComprobante and v.PuntoVenta = @ptoVenta ");
+                    query.AppendLine(" WHERE TRY_CONVERT(BIGINT, v.NumeroDocumento) = TRY_CONVERT(BIGINT, @NumeroDocumento) AND v.IdTipoComprobante = @tipoComprobante and v.PuntoVenta = @ptoVenta ");
+
+                   
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@NumeroDocumento", numeroDocumento);
@@ -288,6 +293,7 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@SubTotal", notaCredito.SubTotal);
                     cmd.Parameters.AddWithValue("@TotalIVA", notaCredito.TotalIVA);
                     cmd.Parameters.AddWithValue("@TotalDescuento", notaCredito.TotalDescuento);
+                    cmd.Parameters.AddWithValue("@PorcentajeDescuento", notaCredito.PorcentajeDescuento);
                     cmd.Parameters.AddWithValue("@MontoTotal", notaCredito.MontoTotal);
                     cmd.Parameters.AddWithValue("@Observaciones", notaCredito.Observaciones ?? (object)DBNull.Value);
 
@@ -339,8 +345,8 @@ namespace CapaDatos
                     query.AppendLine("SELECT ISNULL(MAX(CAST(SUBSTRING(NumeroDocumento, CHARINDEX('-', NumeroDocumento) + 1, LEN(NumeroDocumento)) AS INT)), 0) + 1 AS ProximoNumero");
                     query.AppendLine("FROM VENTA");
                     query.AppendLine("WHERE IdTipoComprobante = @IdTipoComprobante");
-                    query.AppendLine("AND NumeroDocumento LIKE '%-%'");
-
+                    //query.AppendLine("AND NumeroDocumento LIKE '%-%'");
+                    
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@IdTipoComprobante", idTipoComprobante);
                     cmd.CommandType = CommandType.Text;
@@ -350,11 +356,13 @@ namespace CapaDatos
                     int proximoNumero = result != null ? Convert.ToInt32(result) : 1;
 
                     // Formato: 0001-00000001
-                    numeroDocumento = string.Format("0001-{0:D8}", proximoNumero);
+                    //numeroDocumento = string.Format("0001-{0:D10}", proximoNumero);
+                    numeroDocumento = string.Format("{0:D10}", proximoNumero);
                 }
                 catch (Exception ex)
                 {
-                    numeroDocumento = "0001-00000001";
+                    //numeroDocumento = "0001-0000000001";
+                    numeroDocumento = "0000000001";
                     // Log error: ex.Message
                 }
             }

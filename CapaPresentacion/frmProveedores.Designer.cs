@@ -461,7 +461,7 @@
             // frmProveedores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3040, 1192);
             this.Controls.Add(this.btnbuscar);
             this.Controls.Add(this.dgvdata);

@@ -66,7 +66,64 @@ namespace CapaDatos
             }
             return lista;
         }
+        public Cliente ObtenerPorId(int idCliente)
+        {
+            Cliente oCliente = null;
+            using (SqlConnection oconexion = Conexion.GetConnection())
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT Id_Cliente, Apellido, Nombre, Razon_Social, Domicilio, Dni, id_Tipo_dni, Id_Codigo_Iva, Cuit, Id_Zona, Id_Localidad, Id_Provincia, Id_Pais, Telefono, Telefono_Alt, Fax, Email, Web, Contacto, Id_vendedor, Latitud, Longitug, Estado");
+                    query.AppendLine("FROM CLIENTE");
+                    query.AppendLine("WHERE Id_Cliente = @IdCliente");
 
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@IdCliente", idCliente);
+
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            oCliente = new Cliente()
+                            {
+                                IdCliente = Convert.ToInt32(dr["Id_Cliente"]),
+                                Apellido = dr["Apellido"].ToString(),
+                                Nombre = dr["Nombre"].ToString(),
+                                RazonSocial = dr["Razon_Social"].ToString(),
+                                Domicilio = dr["Domicilio"].ToString(),
+                                Dni = dr["Dni"].ToString(),
+                                IdTipoDni = Convert.ToInt32(dr["id_Tipo_dni"]),
+                                IdCodigoIva = Convert.ToInt32(dr["Id_Codigo_Iva"]),
+                                Cuit = dr["Cuit"].ToString(),
+                                IdZona = Convert.ToInt32(dr["Id_Zona"]),
+                                IdLocalidad = Convert.ToInt32(dr["Id_Localidad"]),
+                                IdProvincia = Convert.ToInt32(dr["Id_Provincia"]),
+                                IdPais = Convert.ToInt32(dr["Id_Pais"]),
+                                Telefono = dr["Telefono"].ToString(),
+                                TelefonoAlt = dr["Telefono_Alt"].ToString(),
+                                Fax = dr["Fax"].ToString(),
+                                Email = dr["Email"].ToString(),
+                                Web = dr["Web"].ToString(),
+                                Contacto = dr["Contacto"].ToString(),
+                                IdVendedor = Convert.ToInt32(dr["Id_vendedor"]),
+                                Latitud = Convert.ToDecimal(dr["Latitud"]),
+                                Longitud = Convert.ToDecimal(dr["Longitug"]),
+                                Estado = Convert.ToBoolean(dr["Estado"])
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    oCliente = null;
+                }
+            }
+            return oCliente;
+        }
         public int Registrar(Cliente obj, out string Mensaje)
         {
             int idClientegenerado = 0;

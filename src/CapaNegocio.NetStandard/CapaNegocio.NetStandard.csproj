@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CapaEntidad.NetStandard\CapaEntidad.NetStandard.csproj" />
+    <ProjectReference Include="..\CapaDatos.NetStandard\CapaDatos.NetStandard.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+</Project>

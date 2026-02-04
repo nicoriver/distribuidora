@@ -166,6 +166,131 @@ namespace CapaDatos
             return Respuesta;
         }
 
+        public Venta ObtenerPorNumeroDocumento(string numeroDocumento)
+        {
+            Venta venta = null;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    string query = @"
+                SELECT v.*, tc.Descripcion as TipoComprobanteDesc
+                FROM VENTA v
+                INNER JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante
+                WHERE v.NumeroDocumento = @NumeroDocumento";
+
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@NumeroDocumento", numeroDocumento);
+
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            venta = new Venta()
+                            {
+                                IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                                oUsuario = new Usuario()
+                                {
+                                    IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+                                    NombreCompleto = dr["NombreCompleto"].ToString()
+                                },
+                                oTipoComprobante = dr["IdTipoComprobante"] != DBNull.Value ? new TipoComprobante()
+                                {
+                                    IdTipoComprobante = Convert.ToInt32(dr["IdTipoComprobante"]),
+                                    Codigo = dr["Codigo"].ToString(),
+                                    Descripcion = dr["TipoComprobanteDesc"].ToString(),
+                                    IdListaPrecio = Convert.ToInt32(dr["IdListaPrecio"]),
+                                    DiscriminaIVA = Convert.ToBoolean(dr["DiscriminaIVA"])
+                                } : null,
+                               
+                                    
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                NombreCliente = dr["NombreCliente"].ToString(),
+                                SubTotal = Convert.ToDecimal(dr["SubTotal"]),
+                                TotalIVA = Convert.ToDecimal(dr["TotalIVA"]),
+                                TotalDescuento = Convert.ToDecimal(dr["TotalDescuento"]),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                FechaRegistro = Convert.ToString(dr["FechaRegistro"]),//Convert.ToDateTime(dr["FechaRegistro"]),
+                                //oTipoComprobante = new TipoComprobante()
+                                //{
+                                //    IdTipoComprobante = Convert.ToInt32(dr["IdTipoComprobante"]),
+                                //    Descripcion = dr["TipoComprobanteDesc"].ToString()
+                                //}
+                            };
+
+                            if (dr["IdVentaOriginal"] != DBNull.Value)
+                            {
+                                venta.IdVentaOriginal = Convert.ToInt32(dr["IdVentaOriginal"]);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al obtener venta: {ex.Message}");
+                }
+            }
+
+            return venta;
+        }
+        public List<Detalle_Venta> ObtenerDetalle(int idVenta)
+        {
+            List<Detalle_Venta> lista = new List<Detalle_Venta>();
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    string query = @"
+                SELECT dv.*, p.Codigo, p.Nombre as NombreProducto
+                FROM DETALLE_VENTA dv
+                INNER JOIN PRODUCTO p ON p.IdProducto = dv.IdProducto
+                WHERE dv.IdVenta = @IdVenta";
+
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@IdVenta", idVenta);
+
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Detalle_Venta()
+                            {
+                                IdDetalleVenta = Convert.ToInt32(dr["IdDetalleVenta"]),
+                                //IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                               
+                                PrecioCosto = Convert.ToDecimal(dr["PrecioCosto"]),
+                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                                PorcentajeIVA = Convert.ToDecimal(dr["PorcentajeIVA"]),
+                                ImporteIVA = Convert.ToDecimal(dr["ImporteIVA"]),
+                                PorcentajeDescuento = Convert.ToDecimal(dr["PorcentajeDescuento"]),
+                                ImporteDescuento = Convert.ToDecimal(dr["ImporteDescuento"]),
+                                SubTotal = Convert.ToDecimal(dr["SubTotal"]),
+                                oProducto = new Producto()
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    Codigo = dr["Codigo"].ToString(),
+                                    Nombre = dr["NombreProducto"].ToString()
+                                }
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al obtener detalle: {ex.Message}");
+                }
+            }
+
+            return lista;
+        }
 
         public Venta ObtenerVenta(string numero) {
 
@@ -290,6 +415,7 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("SubTotal", obj.SubTotal);
                     cmd.Parameters.AddWithValue("TotalIVA", obj.TotalIVA);
                     cmd.Parameters.AddWithValue("TotalDescuento", obj.TotalDescuento);
+                    cmd.Parameters.AddWithValue("@PorcentajeDescuento", obj.PorcentajeDescuento);
                     cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
                     cmd.Parameters.AddWithValue("Observaciones", obj.Observaciones ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
@@ -376,7 +502,7 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
 
                     query.AppendLine("SELECT v.IdVenta, v.IdTipoComprobante, v.IdCliente, v.IdVentaOriginal,");
-                    query.AppendLine("u.IdUsuario, u.NombreCompleto,");
+                    query.AppendLine("u.IdUsuario, u.NombreCompleto, c.Domicilio, c.Razon_Social, c.id_localidad, c.Cuit, c.Telefono,");
                     query.AppendLine("tc.Codigo, tc.Descripcion AS TipoComprobanteDesc, tc.IdListaPrecio, tc.DiscriminaIVA,");
                     query.AppendLine("v.DocumentoCliente, v.NombreCliente,");
                     query.AppendLine("v.TipoDocumento, v.NumeroDocumento,");
@@ -385,6 +511,7 @@ namespace CapaDatos
                     query.AppendLine("CONVERT(CHAR(10), v.FechaRegistro, 103) AS FechaRegistro");
                     query.AppendLine("FROM VENTA v");
                     query.AppendLine("INNER JOIN USUARIO u ON u.IdUsuario = v.IdUsuario");
+                    query.AppendLine("INNER JOIN CLIENTE c ON c.Id_Cliente = v.IdCliente");
                     query.AppendLine("LEFT JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");
                     query.AppendLine("WHERE v.NumeroDocumento = @numero");
 
@@ -412,6 +539,15 @@ namespace CapaDatos
                                     IdListaPrecio = Convert.ToInt32(dr["IdListaPrecio"]),
                                     DiscriminaIVA = Convert.ToBoolean(dr["DiscriminaIVA"])
                                 } : null,
+                                oCliente = new Cliente()
+                                {
+                                    IdCliente = Convert.ToInt32(dr["IdCliente"]),
+                                    Nombre = dr["NombreCompleto"].ToString(),                                  
+                                    Domicilio = dr["Domicilio"].ToString(),
+                                    Cuit = dr["Cuit"].ToString(),
+                                    Telefono = dr["Telefono"].ToString(),
+                                    IdLocalidad = Convert.ToInt32(dr["Id_Localidad"])
+                                },
                                 DocumentoCliente = dr["DocumentoCliente"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
                                 TipoDocumento = dr["TipoDocumento"].ToString(),
@@ -494,6 +630,7 @@ namespace CapaDatos
             }
             return oLista;
         }
+
 
         public bool ValidarStockDisponible(int idProducto, int cantidadRequerida, out string mensaje)
         {

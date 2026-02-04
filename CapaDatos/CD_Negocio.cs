@@ -33,6 +33,7 @@ namespace CapaDatos
                                 Nombre = dr["Nombre"].ToString(),
                                 RUC = dr["RUC"].ToString(),
                                 Direccion = dr["Direccion"].ToString()
+                               
                             };
                         }
                     }

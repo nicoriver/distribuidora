@@ -1,4 +1,4 @@
-namespace CapaPresentacion
+﻿namespace CapaPresentacion
 {
     partial class frmVentasFiscales
     {
@@ -39,6 +39,8 @@ namespace CapaPresentacion
             this.btnBuscarProducto = new System.Windows.Forms.Button();
             this.dgvProductos = new System.Windows.Forms.DataGridView();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtDescuento = new System.Windows.Forms.TextBox();
             this.cboFormaPago = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.btnGuardarVenta = new System.Windows.Forms.Button();
@@ -219,7 +221,7 @@ namespace CapaPresentacion
             this.txtIdCliente.Name = "txtIdCliente";
             this.txtIdCliente.Size = new System.Drawing.Size(180, 45);
             this.txtIdCliente.TabIndex = 1;
-            this.txtIdCliente.TextChanged += new System.EventHandler(this.txtIdCliente_TextChanged);            
+            this.txtIdCliente.TextChanged += new System.EventHandler(this.txtIdCliente_TextChanged);
             this.txtIdCliente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtIdCliente_KeyDown);
             // 
             // label12
@@ -313,6 +315,10 @@ namespace CapaPresentacion
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.txtSubTotal);
+            this.groupBox4.Controls.Add(this.txtTotalIVA);
+            this.groupBox4.Controls.Add(this.label7);
+            this.groupBox4.Controls.Add(this.txtDescuento);
             this.groupBox4.Controls.Add(this.cboFormaPago);
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.btnGuardarVenta);
@@ -322,9 +328,7 @@ namespace CapaPresentacion
             this.groupBox4.Controls.Add(this.label9);
             this.groupBox4.Controls.Add(this.txtTotal);
             this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Controls.Add(this.txtTotalIVA);
             this.groupBox4.Controls.Add(this.lblTotalIVA);
-            this.groupBox4.Controls.Add(this.txtSubTotal);
             this.groupBox4.Controls.Add(this.lblSubTotal);
             this.groupBox4.Location = new System.Drawing.Point(32, 1335);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
@@ -335,22 +339,45 @@ namespace CapaPresentacion
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Totales";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(1211, 73);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(189, 39);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Descuento:";
+            // 
+            // txtDescuento
+            // 
+            this.txtDescuento.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescuento.Location = new System.Drawing.Point(1218, 119);
+            this.txtDescuento.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtDescuento.Name = "txtDescuento";
+            this.txtDescuento.ReadOnly = true;
+            this.txtDescuento.Size = new System.Drawing.Size(203, 53);
+            this.txtDescuento.TabIndex = 13;
+            this.txtDescuento.Text = "0.00";
+            this.txtDescuento.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // cboFormaPago
             // 
             this.cboFormaPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFormaPago.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboFormaPago.FormattingEnabled = true;
-            this.cboFormaPago.Location = new System.Drawing.Point(533, 119);
+            this.cboFormaPago.Location = new System.Drawing.Point(510, 120);
             this.cboFormaPago.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.cboFormaPago.Name = "cboFormaPago";
-            this.cboFormaPago.Size = new System.Drawing.Size(393, 46);
+            this.cboFormaPago.Size = new System.Drawing.Size(260, 46);
             this.cboFormaPago.TabIndex = 11;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(533, 72);
+            this.label13.Location = new System.Drawing.Point(510, 73);
             this.label13.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(260, 39);
@@ -399,7 +426,7 @@ namespace CapaPresentacion
             // txtPagaCon
             // 
             this.txtPagaCon.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPagaCon.Location = new System.Drawing.Point(2240, 119);
+            this.txtPagaCon.Location = new System.Drawing.Point(2278, 119);
             this.txtPagaCon.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtPagaCon.Name = "txtPagaCon";
             this.txtPagaCon.Size = new System.Drawing.Size(393, 60);
@@ -412,7 +439,7 @@ namespace CapaPresentacion
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(2240, 72);
+            this.label9.Location = new System.Drawing.Point(2278, 72);
             this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(170, 39);
@@ -423,11 +450,11 @@ namespace CapaPresentacion
             // 
             this.txtTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTotal.ForeColor = System.Drawing.Color.Green;
-            this.txtTotal.Location = new System.Drawing.Point(1760, 107);
+            this.txtTotal.Location = new System.Drawing.Point(1880, 108);
             this.txtTotal.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtTotal.Name = "txtTotal";
             this.txtTotal.ReadOnly = true;
-            this.txtTotal.Size = new System.Drawing.Size(420, 68);
+            this.txtTotal.Size = new System.Drawing.Size(374, 68);
             this.txtTotal.TabIndex = 5;
             this.txtTotal.Text = "0.00";
             this.txtTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -436,7 +463,7 @@ namespace CapaPresentacion
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(1760, 52);
+            this.label8.Location = new System.Drawing.Point(1890, 55);
             this.label8.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(126, 46);
@@ -446,11 +473,11 @@ namespace CapaPresentacion
             // txtTotalIVA
             // 
             this.txtTotalIVA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalIVA.Location = new System.Drawing.Point(987, 119);
+            this.txtTotalIVA.Location = new System.Drawing.Point(1545, 119);
             this.txtTotalIVA.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtTotalIVA.Name = "txtTotalIVA";
             this.txtTotalIVA.ReadOnly = true;
-            this.txtTotalIVA.Size = new System.Drawing.Size(393, 53);
+            this.txtTotalIVA.Size = new System.Drawing.Size(247, 53);
             this.txtTotalIVA.TabIndex = 3;
             this.txtTotalIVA.Text = "0.00";
             this.txtTotalIVA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -459,7 +486,7 @@ namespace CapaPresentacion
             // 
             this.lblTotalIVA.AutoSize = true;
             this.lblTotalIVA.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalIVA.Location = new System.Drawing.Point(987, 72);
+            this.lblTotalIVA.Location = new System.Drawing.Point(1538, 73);
             this.lblTotalIVA.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblTotalIVA.Name = "lblTotalIVA";
             this.lblTotalIVA.Size = new System.Drawing.Size(167, 39);
@@ -469,11 +496,11 @@ namespace CapaPresentacion
             // txtSubTotal
             // 
             this.txtSubTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSubTotal.Location = new System.Drawing.Point(1440, 119);
+            this.txtSubTotal.Location = new System.Drawing.Point(839, 119);
             this.txtSubTotal.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.txtSubTotal.Name = "txtSubTotal";
             this.txtSubTotal.ReadOnly = true;
-            this.txtSubTotal.Size = new System.Drawing.Size(260, 53);
+            this.txtSubTotal.Size = new System.Drawing.Size(238, 53);
             this.txtSubTotal.TabIndex = 1;
             this.txtSubTotal.Text = "0.00";
             this.txtSubTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -482,7 +509,7 @@ namespace CapaPresentacion
             // 
             this.lblSubTotal.AutoSize = true;
             this.lblSubTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubTotal.Location = new System.Drawing.Point(1440, 72);
+            this.lblSubTotal.Location = new System.Drawing.Point(839, 72);
             this.lblSubTotal.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.lblSubTotal.Name = "lblSubTotal";
             this.lblSubTotal.Size = new System.Drawing.Size(151, 39);
@@ -492,7 +519,7 @@ namespace CapaPresentacion
             // frmVentasFiscales
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(3200, 1598);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -553,5 +580,8 @@ namespace CapaPresentacion
         private System.Windows.Forms.TextBox txtSubTotal;
         private System.Windows.Forms.Label lblSubTotal;
         private System.Windows.Forms.Button btnGuardarVenta;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtDescuento;
     }
 }
+

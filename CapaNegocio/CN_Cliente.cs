@@ -18,7 +18,11 @@ namespace CapaNegocio
         {
             return objcd_Cliente.Listar();
         }
-
+        // Método para obtener un cliente por ID
+        public Cliente ObtenerPorId(int idCliente)
+        {
+            return objcd_Cliente.ObtenerPorId(idCliente);
+        }
         public int Registrar(Cliente obj, out string Mensaje)
         {
             Mensaje = string.Empty;

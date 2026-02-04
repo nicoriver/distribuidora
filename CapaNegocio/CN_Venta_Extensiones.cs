@@ -221,14 +221,16 @@ namespace CapaNegocio
                 if (idTipoComprobante <= 0)
                 {
                     mensaje = "El tipo de comprobante no es válido";
-                    return "0001-00000001";
+                    //return "0001-00000001";
+                    return "0000000001";
                 }
 
                 numeroDocumento = objcd_venta.ObtenerProximoNumeroNC(idTipoComprobante);
 
                 if (string.IsNullOrWhiteSpace(numeroDocumento))
                 {
-                    numeroDocumento = "0001-00000001";
+                    //numeroDocumento = "0001-00000001";
+                    numeroDocumento = "0000000001";
                 }
 
                 mensaje = "Número obtenido exitosamente";
@@ -236,7 +238,8 @@ namespace CapaNegocio
             catch (Exception ex)
             {
                 mensaje = "Error al obtener el número: " + ex.Message;
-                numeroDocumento = "0001-00000001";
+                //numeroDocumento = "0001-00000001";
+                numeroDocumento = "0000000001";
             }
 
             return numeroDocumento;
