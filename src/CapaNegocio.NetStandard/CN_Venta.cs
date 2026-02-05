@@ -26,6 +26,11 @@ namespace CapaNegocio
         {
             return objcd_venta.ObtenerCorrelativo();
         }
+
+        public int ObtenerProximoNumero(int idTipoComprobante, int puntoVenta)
+        {
+            return objcd_venta.ObtenerProximoNumero(idTipoComprobante, puntoVenta);
+        }
         //public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
         //{
         //    return objcd_venta.ObtenerCorrelativoPorTipo(idTipoComprobante, puntoVenta);

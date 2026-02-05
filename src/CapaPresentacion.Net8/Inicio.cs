@@ -34,12 +34,12 @@ namespace CapaPresentacion.Net8
             };
             
             var menuVentas = new ToolStripMenuItem("Ventas");
-            menuVentas.DropDownItems.Add("Nueva Venta", null, (s, e) => MessageBox.Show("Próximamente: frmVentasFiscales"));
+            menuVentas.DropDownItems.Add("Nueva Venta", null, (s, e) => AbrirFormulario(new frmVentasFiscales()));
             menuVentas.DropDownItems.Add("Devoluciones", null, (s, e) => MessageBox.Show("Próximamente: frmDevoluciones"));
             
             var menuMaestros = new ToolStripMenuItem("Maestros");
             menuMaestros.DropDownItems.Add("Clientes", null, (s, e) => AbrirFormulario(new frmClientes()));
-            menuMaestros.DropDownItems.Add("Productos", null, (s, e) => MessageBox.Show("Próximamente: frmProductos"));
+            menuMaestros.DropDownItems.Add("Productos", null, (s, e) => AbrirFormulario(new frmProducto()));
             menuMaestros.DropDownItems.Add("Proveedores", null, (s, e) => MessageBox.Show("Próximamente: frmProveedores"));
             
             var menuReportes = new ToolStripMenuItem("Reportes");

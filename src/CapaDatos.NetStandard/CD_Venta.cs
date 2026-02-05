@@ -38,6 +38,38 @@ namespace CapaDatos
             }
             return idcorrelativo;
         }
+        public int ObtenerProximoNumero(int idTipoComprobante, int puntoVenta)
+        {
+            int proximoNumero = 1;
+            using (SqlConnection oconexion = Conexion.GetConnection())
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT ISNULL(MAX(CAST(SUBSTRING(NumeroDocumento, 6, 8) AS INT)), 0) + 1 AS ProximoNumero");
+                    query.AppendLine("FROM VENTA");
+                    query.AppendLine("WHERE IdTipoComprobante = @IdTipoComprobante");
+                    query.AppendLine("AND CAST(SUBSTRING(NumeroDocumento, 1, 4) AS INT) = @PuntoVenta");
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.Parameters.AddWithValue("@IdTipoComprobante", idTipoComprobante);
+                    cmd.Parameters.AddWithValue("@PuntoVenta", puntoVenta);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            proximoNumero = Convert.ToInt32(dr["ProximoNumero"]);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    proximoNumero = 1;
+                }
+            }
+            return proximoNumero;
+        }
         public int ObtenerCorrelativoPorTipo(int idTipoComprobante, int puntoVenta)
         {
             int idcorrelativo = 0;
