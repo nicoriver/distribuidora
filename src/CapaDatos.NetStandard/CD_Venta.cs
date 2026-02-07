@@ -46,10 +46,14 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT ISNULL(MAX(CAST(SUBSTRING(NumeroDocumento, 6, 8) AS INT)), 0) + 1 AS ProximoNumero");
+                    // ✅ Extraer los 10 dígitos después del guión (posición 6)
+                    // Formato: PPPP-NNNNNNNNNN (4 dígitos + guión + 10 dígitos)
+                    //query.AppendLine("SELECT ISNULL(MAX(CAST(SUBSTRING(NumeroDocumento, 6, 10) AS BIGINT)), 0) + 1 AS ProximoNumero");
+                    query.AppendLine("SELECT ISNULL(MAX(CAST(NumeroDocumento AS BIGINT)), 0) + 1 AS ProximoNumero");
                     query.AppendLine("FROM VENTA");
                     query.AppendLine("WHERE IdTipoComprobante = @IdTipoComprobante");
-                    query.AppendLine("AND CAST(SUBSTRING(NumeroDocumento, 1, 4) AS INT) = @PuntoVenta");
+                    query.AppendLine("AND PuntoVenta = @PuntoVenta");
+                    query.AppendLine("group by IdTipoComprobante,PuntoVenta");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.Parameters.AddWithValue("@IdTipoComprobante", idTipoComprobante);
                     cmd.Parameters.AddWithValue("@PuntoVenta", puntoVenta);
@@ -168,7 +172,7 @@ namespace CapaDatos
                 using (SqlConnection oconexion = Conexion.GetConnection())
                 {
                     SqlCommand cmd = new SqlCommand("usp_RegistrarVenta", oconexion);
-                    cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
+                    cmd.Parameters.AddWithValue("IdUsuario", 1);//obj.oUsuario.IdUsuario
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
@@ -385,7 +389,7 @@ namespace CapaDatos
                 {
                     conexion.Open();
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select p.Nombre,dv.PrecioVenta,dv.Cantidad,dv.SubTotal from DETALLE_VENTA dv");
+                    query.AppendLine("select dv.IdDetalleVenta, dv.IdProducto, p.Codigo, p.Nombre, dv.PrecioCosto, dv.PrecioVenta, dv.Cantidad,dv.PorcentajeIVA, dv.ImporteIVA,dv.PorcentajeDescuento, dv.ImporteDescuento, dv.SubTotal from DETALLE_VENTA dv ");
                     query.AppendLine("inner join PRODUCTO p on p.IdProducto = dv.IdProducto");
                     query.AppendLine(" where dv.IdVenta = @idventa");
 
@@ -394,19 +398,32 @@ namespace CapaDatos
                     cmd.CommandType = System.Data.CommandType.Text;
 
 
+
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
                             oLista.Add(new Detalle_Venta()
                             {
-                                oProducto = new Producto() { Nombre = dr["Nombre"].ToString() },
-                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString()),
-                                Cantidad = Convert.ToInt32(dr["Cantidad"].ToString()),
-                                SubTotal = Convert.ToDecimal(dr["SubTotal"].ToString()),
+                                IdDetalleVenta = Convert.ToInt32(dr["IdDetalleVenta"]),
+                                oProducto = new Producto()
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    Codigo = dr["Codigo"].ToString(),
+                                    Nombre = dr["Nombre"].ToString()
+                                },
+                                PrecioCosto = Convert.ToDecimal(dr["PrecioCosto"]),
+                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                                PorcentajeIVA = Convert.ToDecimal(dr["PorcentajeIVA"]),
+                                ImporteIVA = Convert.ToDecimal(dr["ImporteIVA"]),
+                                PorcentajeDescuento = Convert.ToDecimal(dr["PorcentajeDescuento"]),
+                                ImporteDescuento = Convert.ToDecimal(dr["ImporteDescuento"]),
+                                SubTotal = Convert.ToDecimal(dr["SubTotal"])
                             });
                         }
                     }
+
 
                 }
                 catch {
@@ -447,7 +464,9 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("SubTotal", obj.SubTotal);
                     cmd.Parameters.AddWithValue("TotalIVA", obj.TotalIVA);
                     cmd.Parameters.AddWithValue("TotalDescuento", obj.TotalDescuento);
-                    cmd.Parameters.AddWithValue("@PorcentajeDescuento", obj.PorcentajeDescuento);
+                    cmd.Parameters.AddWithValue("PorcentajeDescuento", obj.PorcentajeDescuento);
+                    cmd.Parameters.AddWithValue("MontoInteres", 0); // Valor por defecto
+                    cmd.Parameters.AddWithValue("PorcentajeInteres", 0); // Valor por defecto
                     cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
                     cmd.Parameters.AddWithValue("Observaciones", obj.Observaciones ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
@@ -493,12 +512,20 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("IdVentaOriginal", obj.oVentaOriginal.IdVenta);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
+                    cmd.Parameters.AddWithValue("IdTipoComprobante", obj.oTipoComprobante.IdTipoComprobante);
                     cmd.Parameters.AddWithValue("SubTotal", obj.SubTotal);
                     cmd.Parameters.AddWithValue("TotalIVA", obj.TotalIVA);
+                    cmd.Parameters.AddWithValue("PorcentajeDescuento", obj.PorcentajeDescuento);
                     cmd.Parameters.AddWithValue("TotalDescuento", obj.TotalDescuento);
                     cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
+                    cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
                     cmd.Parameters.AddWithValue("Observaciones", obj.Observaciones ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
+                    
+                    // Table-Valued Parameter - DEBE usar SqlDbType.Structured
+                    SqlParameter paramDetalle = cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
+                    paramDetalle.SqlDbType = SqlDbType.Structured;
+                    paramDetalle.TypeName = "dbo.EDetalle_VentaFiscal";
+                    
                     cmd.Parameters.Add("IdNotaCreditoResultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -522,7 +549,7 @@ namespace CapaDatos
             return Respuesta;
         }
 
-        public Venta ObtenerVentaCompleta(string numeroDocumento)
+        public Venta ObtenerVentaCompleta(string numeroDocumento, int ptoventa, int idtipocomprobante)
         {
             Venta obj = new Venta();
 
@@ -544,11 +571,13 @@ namespace CapaDatos
                     query.AppendLine("FROM VENTA v");
                     query.AppendLine("INNER JOIN USUARIO u ON u.IdUsuario = v.IdUsuario");
                     query.AppendLine("INNER JOIN CLIENTE c ON c.Id_Cliente = v.IdCliente");
-                    query.AppendLine("LEFT JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");
-                    query.AppendLine("WHERE v.NumeroDocumento = @numero");
+                    query.AppendLine("LEFT JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");                   
+                    query.AppendLine("WHERE v.NumeroDocumento = @numero AND v.IdTipoComprobante = @idtipocomprobante AND v.PuntoVenta = @ptoventa");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@numero", numeroDocumento);
+                    cmd.Parameters.AddWithValue("@idtipocomprobante", idtipocomprobante);
+                    cmd.Parameters.AddWithValue("@ptoventa", ptoventa);
                     cmd.CommandType = CommandType.Text;
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
@@ -595,6 +624,12 @@ namespace CapaDatos
                             };
                         }
                     }
+
+                    // Cargar detalle de la venta
+                    if (obj.IdVenta > 0)
+                    {
+                        obj.oDetalle_Venta = ObtenerDetalleVentaCompleto(obj.IdVenta);
+                    }
                 }
                 catch
                 {
@@ -603,7 +638,92 @@ namespace CapaDatos
             }
             return obj;
         }
+        public Venta ObtenerVentaxid( int IdVenta)
+        {
+            Venta obj = new Venta();
 
+            using (SqlConnection conexion = Conexion.GetConnection())
+            {
+                try
+                {
+                    conexion.Open();
+                    StringBuilder query = new StringBuilder();
+
+                    query.AppendLine("SELECT v.IdVenta, v.IdTipoComprobante, v.IdCliente, v.IdVentaOriginal,");
+                    query.AppendLine("u.IdUsuario, u.NombreCompleto, c.Domicilio, c.Razon_Social, c.id_localidad, c.Cuit, c.Telefono,");
+                    query.AppendLine("tc.Codigo, tc.Descripcion AS TipoComprobanteDesc, tc.IdListaPrecio, tc.DiscriminaIVA,");
+                    query.AppendLine("v.DocumentoCliente, v.NombreCliente,");
+                    query.AppendLine("v.TipoDocumento, v.NumeroDocumento,");
+                    query.AppendLine("v.MontoPago, v.MontoCambio, v.SubTotal, v.TotalIVA, v.TotalDescuento, v.MontoTotal,");
+                    query.AppendLine("v.Observaciones,");
+                    query.AppendLine("CONVERT(CHAR(10), v.FechaRegistro, 103) AS FechaRegistro");
+                    query.AppendLine("FROM VENTA v");
+                    query.AppendLine("INNER JOIN USUARIO u ON u.IdUsuario = v.IdUsuario");
+                    query.AppendLine("INNER JOIN CLIENTE c ON c.Id_Cliente = v.IdCliente");
+                    query.AppendLine("LEFT JOIN TipoComprobante tc ON tc.IdTipoComprobante = v.IdTipoComprobante");
+                    query.AppendLine("WHERE v.IdVenta = @IdVenta");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
+                    cmd.Parameters.AddWithValue("@IdVenta", IdVenta);                    
+                    cmd.CommandType = CommandType.Text;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            obj = new Venta()
+                            {
+                                IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                                oUsuario = new Usuario()
+                                {
+                                    IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+                                    NombreCompleto = dr["NombreCompleto"].ToString()
+                                },
+                                oTipoComprobante = dr["IdTipoComprobante"] != DBNull.Value ? new TipoComprobante()
+                                {
+                                    IdTipoComprobante = Convert.ToInt32(dr["IdTipoComprobante"]),
+                                    Codigo = dr["Codigo"].ToString(),
+                                    Descripcion = dr["TipoComprobanteDesc"].ToString(),
+                                    IdListaPrecio = Convert.ToInt32(dr["IdListaPrecio"]),
+                                    DiscriminaIVA = Convert.ToBoolean(dr["DiscriminaIVA"])
+                                } : null,
+                                oCliente = new Cliente()
+                                {
+                                    IdCliente = Convert.ToInt32(dr["IdCliente"]),
+                                    Nombre = dr["NombreCompleto"].ToString(),
+                                    Domicilio = dr["Domicilio"].ToString(),
+                                    Cuit = dr["Cuit"].ToString(),
+                                    Telefono = dr["Telefono"].ToString(),
+                                    IdLocalidad = Convert.ToInt32(dr["Id_Localidad"])
+                                },
+                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                NombreCliente = dr["NombreCliente"].ToString(),
+                                TipoDocumento = dr["TipoDocumento"].ToString(),
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                MontoPago = Convert.ToDecimal(dr["MontoPago"]),
+                                MontoCambio = Convert.ToDecimal(dr["MontoCambio"]),
+                                SubTotal = Convert.ToDecimal(dr["SubTotal"]),
+                                TotalIVA = Convert.ToDecimal(dr["TotalIVA"]),
+                                TotalDescuento = Convert.ToDecimal(dr["TotalDescuento"]),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                Observaciones = dr["Observaciones"].ToString(),
+                                FechaRegistro = dr["FechaRegistro"].ToString()
+                            };
+                        }
+                    }
+
+                    // Cargar detalle de la venta
+                    if (obj.IdVenta > 0)
+                    {
+                        obj.oDetalle_Venta = ObtenerDetalleVentaCompleto(obj.IdVenta);
+                    }
+                }
+                catch
+                {
+                    obj = new Venta();
+                }
+            }
+            return obj;
+        }
         public List<Detalle_Venta> ObtenerDetalleVentaCompleto(int idVenta)
         {
             List<Detalle_Venta> oLista = new List<Detalle_Venta>();

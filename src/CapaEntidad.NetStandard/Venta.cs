@@ -24,7 +24,8 @@ namespace CapaEntidad
         public decimal MontoCambio { get; set; }
         public decimal SubTotal { get; set; }
         public decimal TotalIVA { get; set; }
-        public decimal TotalDescuento { get; set; }        public decimal PorcentajeDescuento { get; set; }
+        public decimal TotalDescuento { get; set; }
+        public decimal PorcentajeDescuento { get; set; }
         public decimal MontoInteres { get; set; }
         public decimal PorcentajeInteres { get; set; }
 

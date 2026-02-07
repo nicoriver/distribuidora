@@ -64,55 +64,57 @@ namespace CapaDatos
 
         }
 
-        public List<ReporteVenta> Venta(string fechainicio, string fechafin)
+        public List<Venta> ObtenerVentas(string fechaInicio, string fechaFin, int? idTipoComprobante, int? puntoVenta)
         {
-            List<ReporteVenta> lista = new List<ReporteVenta>();
-
-            using (SqlConnection oconexion = Conexion.GetConnection())
+            List<Venta> lista = new List<Venta>();
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
                 try
                 {
-                    StringBuilder query = new StringBuilder();
-                    SqlCommand cmd = new SqlCommand("sp_ReporteVentas", oconexion);
-                    cmd.Parameters.AddWithValue("fechainicio", fechainicio);
-                    cmd.Parameters.AddWithValue("fechafin", fechafin);
+                    string query = "sp_ReporteVentas";
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                    cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+                    cmd.Parameters.AddWithValue("@IdTipoComprobante", idTipoComprobante ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PuntoVenta", puntoVenta ?? (object)DBNull.Value);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     oconexion.Open();
-
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            lista.Add(new ReporteVenta()
+                            lista.Add(new Venta()
                             {
-                                FechaRegistro = dr["FechaRegistro"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
+                                IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                                oTipoComprobante = new TipoComprobante()
+                                {
+                                    IdTipoComprobante = Convert.ToInt32(dr["IdTipoComprobante"]),
+                                    Descripcion = dr["TipoComprobante"].ToString()
+                                },
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                MontoTotal = dr["MontoTotal"].ToString(),
-                                UsuarioRegistro = dr["UsuarioRegistro"].ToString(),
-                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
-                                CodigoProducto = dr["CodigoProducto"].ToString(),
-                                NombreProducto = dr["NombreProducto"].ToString(),
-                                Categoria = dr["Categoria"].ToString(),
-                                PrecioVenta = dr["PrecioVenta"].ToString(),
-                                Cantidad = dr["Cantidad"].ToString(),
-                                SubTotal = dr["SubTotal"].ToString(),
+                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                FechaRegistro = dr["FechaRegistro"].ToString(),
+                                // Obtener detalle
+                                //oDetalle_Venta = new Detalle_Venta()
+                                //{
+                                //    oDetalle_Venta.ObtenerDetalleVentaCompleto(Convert.ToInt32(dr["IdVenta"])),
+                                //}
+                                    
+                                // Propiedad auxiliar para mostrar cantidad en grilla (puedes agregarla a Venta o ignorarla)
+                                // CantidadProductos = Convert.ToInt32(dr["CantidadProductos"]) 
                             });
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    lista = new List<ReporteVenta>();
+                    lista = new List<Venta>();
                 }
             }
-
             return lista;
-
         }
-
 
 
     }

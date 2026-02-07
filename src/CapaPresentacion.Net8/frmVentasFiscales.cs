@@ -78,19 +78,24 @@ namespace CapaPresentacion.Net8
 
         private void ConfigurarDataGridView()
         {
-            dgvProductos.Columns.Clear();
             dgvProductos.Rows.Clear();
-            dgvProductos.AllowUserToAddRows = false;
+            dgvProductos.Columns.Clear();
+            
+            // Configuración general
+            dgvProductos.AllowUserToAddRows = false; // ✅ IMPORTANTE: Evita que se agregue fila automática
+            dgvProductos.MultiSelect = false;
+            dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvProductos.ReadOnly = false;
 
             // Columna Código (editable)
             DataGridViewTextBoxColumn colCodigo = new DataGridViewTextBoxColumn();
             colCodigo.HeaderText = "Código";
             colCodigo.Name = "Codigo";
-            colCodigo.Width = 100;
+            colCodigo.Width = 80;
             colCodigo.ReadOnly = false;
             dgvProductos.Columns.Add(colCodigo);
 
-            // Columna IdProducto (oculta - para uso interno)
+            // Columna IdProducto (oculta)
             DataGridViewTextBoxColumn colIdProducto = new DataGridViewTextBoxColumn();
             colIdProducto.HeaderText = "IdProducto";
             colIdProducto.Name = "IdProducto";
@@ -101,7 +106,7 @@ namespace CapaPresentacion.Net8
             DataGridViewTextBoxColumn colProducto = new DataGridViewTextBoxColumn();
             colProducto.HeaderText = "Producto";
             colProducto.Name = "Producto";
-            colProducto.Width = 300;
+            colProducto.Width = 200;
             colProducto.ReadOnly = true;
             dgvProductos.Columns.Add(colProducto);
 
@@ -119,7 +124,7 @@ namespace CapaPresentacion.Net8
             DataGridViewTextBoxColumn colUnidades = new DataGridViewTextBoxColumn();
             colUnidades.HeaderText = "Unidades";
             colUnidades.Name = "Unidades";
-            colUnidades.Width = 90;
+            colUnidades.Width = 80;
             colUnidades.ReadOnly = false;
             colUnidades.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dgvProductos.Columns.Add(colUnidades);
@@ -142,6 +147,15 @@ namespace CapaPresentacion.Net8
             colTotal.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             colTotal.DefaultCellStyle.Format = "N2";
             dgvProductos.Columns.Add(colTotal);
+
+            // ✅ Columna Botón Eliminar
+            DataGridViewButtonColumn colEliminar = new DataGridViewButtonColumn();
+            colEliminar.HeaderText = "";
+            colEliminar.Name = "btnEliminar";
+            colEliminar.Text = "Eliminar";
+            colEliminar.UseColumnTextForButtonValue = true;
+            colEliminar.Width = 80;
+            dgvProductos.Columns.Add(colEliminar);
 
             // Eventos
             dgvProductos.CellEndEdit += dgvProductos_CellEndEdit;
@@ -191,47 +205,77 @@ namespace CapaPresentacion.Net8
 
         private void dgvProductos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-
-            DataGridViewRow row = dgvProductos.Rows[e.RowIndex];
-            string columnName = dgvProductos.Columns[e.ColumnIndex].Name;
-
-            // FLUJO: Código → Unidades → Descuento
-            if (columnName == "Codigo")
+            try
             {
-                // Usuario ingresó código → Buscar producto
-                string codigo = row.Cells["Codigo"].Value?.ToString() ?? "";
-                if (!string.IsNullOrWhiteSpace(codigo))
+                if (e.RowIndex < 0) return;
+
+                DataGridViewRow row = dgvProductos.Rows[e.RowIndex];
+                string columnName = dgvProductos.Columns[e.ColumnIndex].Name;
+
+                // FLUJO: Código → Unidades → Descuento → Código siguiente
+                if (columnName == "Codigo")
                 {
-                    BuscarYCargarProducto(e.RowIndex, codigo);
+                    // Usuario ingresó código → Buscar producto
+                    string codigo = row.Cells["Codigo"].Value?.ToString() ?? "";
+                    if (!string.IsNullOrWhiteSpace(codigo))
+                    {
+                        BuscarYCargarProducto(e.RowIndex, codigo);
+                    }
+                    else
+                    {
+                        // ✅ Usuario borró código → Limpiar producto pero mantener unidades/descuento
+                        row.Cells["IdProducto"].Value = null;
+                        row.Cells["Producto"].Value = "";
+                        row.Cells["Precio"].Value = 0;
+                        CalcularTotalesLinea(e.RowIndex);
+                        CalcularTotalesGenerales();
+                    }
+                }
+                else if (columnName == "Unidades")
+                {
+                    // Usuario ingresó unidades → Calcular y mover a Descuento
+                    CalcularTotalesLinea(e.RowIndex);
+                    CalcularTotalesGenerales();
+                    
+                    // ✅ Usar BeginInvoke para evitar error SetCurrentCellAddressCore
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        if (e.RowIndex < dgvProductos.Rows.Count)
+                        {
+                            dgvProductos.CurrentCell = dgvProductos.Rows[e.RowIndex].Cells["DescuentoPorcentaje"];
+                            dgvProductos.BeginEdit(true);
+                        }
+                    }));
+                }
+                else if (columnName == "DescuentoPorcentaje")
+                {
+                    // Usuario ingresó descuento → Calcular y mover a siguiente fila
+                    CalcularTotalesLinea(e.RowIndex);
+                    CalcularTotalesGenerales();
+                    
+                    // ✅ Usar BeginInvoke para evitar error SetCurrentCellAddressCore
+                    int currentRow = e.RowIndex;
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        if (currentRow + 1 < dgvProductos.Rows.Count)
+                        {
+                            // Ya existe siguiente fila
+                            dgvProductos.CurrentCell = dgvProductos.Rows[currentRow + 1].Cells["Codigo"];
+                            dgvProductos.BeginEdit(true);
+                        }
+                        else
+                        {
+                            // No existe, crear nueva fila vacía
+                            AgregarFilaVacia();
+                            dgvProductos.CurrentCell = dgvProductos.Rows[currentRow + 1].Cells["Codigo"];
+                            dgvProductos.BeginEdit(true);
+                        }
+                    }));
                 }
             }
-            else if (columnName == "Unidades")
+            catch (Exception ex)
             {
-                // Usuario ingresó unidades → Calcular y mover a Descuento
-                CalcularTotalesLinea(e.RowIndex);
-                
-                // Mover foco a Descuento
-                dgvProductos.CurrentCell = row.Cells["DescuentoPorcentaje"];
-                dgvProductos.BeginEdit(true);
-            }
-            else if (columnName == "DescuentoPorcentaje")
-            {
-                // Usuario ingresó descuento → Calcular, nueva fila, volver a Código
-                CalcularTotalesLinea(e.RowIndex);
-                
-                // Agregar nueva fila vacía si es la última
-                if (e.RowIndex == dgvProductos.Rows.Count - 1)
-                {
-                    AgregarFilaVacia();
-                }
-                
-                // Mover foco a Código de la siguiente fila
-                if (e.RowIndex + 1 < dgvProductos.Rows.Count)
-                {
-                    dgvProductos.CurrentCell = dgvProductos.Rows[e.RowIndex + 1].Cells["Codigo"];
-                    dgvProductos.BeginEdit(true);
-                }
+                MostrarError($"Error al editar celda: {ex.Message}");
             }
         }
 
@@ -331,7 +375,29 @@ namespace CapaPresentacion.Net8
 
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Implementaremos en Fase 3
+            if (e.RowIndex < 0) return;
+
+            // ✅ Manejar click en botón Eliminar
+            if (dgvProductos.Columns[e.ColumnIndex].Name == "btnEliminar")
+            {
+                DataGridViewRow row = dgvProductos.Rows[e.RowIndex];
+                string producto = row.Cells["Producto"].Value?.ToString() ?? "";
+
+                if (!string.IsNullOrWhiteSpace(producto))
+                {
+                    if (SolicitarConfirmacion($"¿Eliminar el producto '{producto}'?"))
+                    {
+                        dgvProductos.Rows.RemoveAt(e.RowIndex);
+                        CalcularTotalesGenerales();
+                    }
+                }
+                else
+                {
+                    // Fila vacía, eliminar sin confirmar
+                    dgvProductos.Rows.RemoveAt(e.RowIndex);
+                    CalcularTotalesGenerales();
+                }
+            }
         }
 
         private void dgvProductos_KeyDown(object sender, KeyEventArgs e)
@@ -357,10 +423,13 @@ namespace CapaPresentacion.Net8
                     {
                         // Fila vacía, eliminar sin confirmar
                         dgvProductos.Rows.RemoveAt(rowIndex);
+                        CalcularTotalesGenerales();
                     }
+                    
+                    // Prevenir que el evento se propague
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
                 }
-                
-                e.Handled = true;
             }
         }
 
@@ -374,7 +443,12 @@ namespace CapaPresentacion.Net8
                 // Sumar todos los ítems
                 foreach (DataGridViewRow row in dgvProductos.Rows)
                 {
-                    if (row.IsNewRow) continue;
+                    // ✅ IGNORAR filas vacías (sin producto)
+                    if (row.Cells["IdProducto"].Value == null || 
+                        string.IsNullOrWhiteSpace(row.Cells["IdProducto"].Value.ToString()))
+                    {
+                        continue;
+                    }
 
                     decimal precio = 0;
                     decimal unidades = 0;
@@ -402,9 +476,9 @@ namespace CapaPresentacion.Net8
                 // La diferencia es:
                 // - Factura A (DiscriminaIVA=1): MUESTRA el IVA discriminado
                 // - Factura B (DiscriminaIVA=0): NO MUESTRA el IVA pero SÍ lo aplica
-                // - Remito (REC): NO aplica IVA
+                // - Remito (R): NO aplica IVA
                 
-                if (_TipoComprobanteSeleccionado != null && _TipoComprobanteSeleccionado.Codigo != "REC")
+                if (_TipoComprobanteSeleccionado != null && _TipoComprobanteSeleccionado.Codigo != "R")
                 {
                     // Factura A o Factura B - Ambas aplican IVA 21%
                     iva = neto * 0.21m;
@@ -452,19 +526,15 @@ namespace CapaPresentacion.Net8
                     puntoVenta
                 );
 
-                string puntoVentaStr = puntoVenta.ToString("0000");
-                string numeroStr = proximoNumero.ToString("00000000");
-
-                txtNumeroDocumento.Text = $"{puntoVentaStr}-{numeroStr}";
+                // ✅ Mostrar solo el número con 10 dígitos (sin punto de venta)
+                // El punto de venta ya se muestra en cboPuntoVenta
+                txtNumeroDocumento.Text = proximoNumero.ToString("0000000000");
             }
             catch (Exception ex)
             {
                 // Si falla, usar número 1 por defecto
-                string puntoVentaStr = puntoVenta.ToString("0000");
-                string numeroStr = "00000001";
-                txtNumeroDocumento.Text = $"{puntoVentaStr}-{numeroStr}";
-                
-                MostrarError("Error al obtener número de documento: " + ex.Message);
+                txtNumeroDocumento.Text = "0000000001";
+                MostrarError($"Error al obtener próximo número: {ex.Message}");
             }
         }
 
@@ -518,10 +588,283 @@ namespace CapaPresentacion.Net8
             txtCondicionIVA.Text = ""; // TODO: Cargar desde tabla CodigoIVA si es necesario
         }
 
+        private void txtPagaCon_TextChanged(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtPagaCon.Text, out decimal pagaCon))
+            {
+                decimal total = 0;
+                decimal.TryParse(lblTotal.Text, out total);
+                
+                decimal cambio = pagaCon - total;
+                txtCambio.Text = cambio.ToString("N2");
+            }
+            else
+            {
+                txtCambio.Text = "0.00";
+            }
+        }
+
         private void btnGuardarVenta_Click(object sender, EventArgs e)
         {
-            // Implementaremos en Fase 5
-            MostrarError("Funcionalidad de guardar será implementada en Fase 5");
+            try
+            {
+                // 1. Validaciones
+                if (!ValidarVenta(out string mensajeError))
+                {
+                    MostrarError(mensajeError);
+                    return;
+                }
+
+                // 2. Confirmar guardado
+                if (!SolicitarConfirmacion($"¿Desea guardar la venta?\n\nTipo: {_TipoComprobanteSeleccionado.Descripcion}\nCliente: {txtNombreCliente.Text}\nTotal: ${lblTotal.Text}"))
+                {
+                    return;
+                }
+
+                // 2. Calcular totales
+                decimal subtotal = decimal.Parse(lblSubtotal.Text);
+                decimal descuentoTotal = decimal.Parse(lblDescuento.Text);
+                decimal iva = decimal.Parse(lblIVA.Text);
+                decimal total = decimal.Parse(lblTotal.Text);
+
+                // 3. Crear objeto Venta
+                int puntoVenta = Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor);
+
+                // ✅ Construir número de documento completo: NNNNNNNNNN
+                // txtNumeroDocumento solo tiene el número (10 dígitos)
+                //string numeroCompleto = $"{puntoVenta:0000}-{txtNumeroDocumento.Text}";
+                string numeroCompleto = $"{txtNumeroDocumento.Text}";
+                Venta oVenta = new Venta
+                {
+                    oUsuario = new Usuario { IdUsuario = 1 }, // TODO: Usuario actual
+                    
+                    // Asignar objetos completos para que el stored procedure extraiga los IDs
+                    oTipoComprobante = _TipoComprobanteSeleccionado,
+                    oCliente = _ClienteSeleccionado,
+                    NumeroDocumento = numeroCompleto, // ✅ Formato completo: 0001-0000000123
+                    PuntoVenta = puntoVenta,
+                    TipoDocumento = _TipoComprobanteSeleccionado.Codigo,
+                    DocumentoCliente = _ClienteSeleccionado.Dni,
+                    NombreCliente = $"{_ClienteSeleccionado.Apellido}, {_ClienteSeleccionado.Nombre}",
+                    FechaRegistro = dtpFecha.Value.ToString("yyyy-MM-dd"),
+                    
+                    // Estructura AFIP
+                    SubTotal = subtotal,
+                    TotalDescuento = descuentoTotal,
+                    TotalIVA = iva,
+                    MontoTotal = total,
+                    
+                    // Pago (opcional)
+                    FormaPago = cboFormaPago.SelectedItem?.ToString() ?? "Efectivo",
+                    MontoPago = decimal.TryParse(txtPagaCon.Text, out decimal pago) ? pago : 0,
+                    MontoCambio = decimal.TryParse(txtCambio.Text, out decimal cambio) ? cambio : 0
+                };
+
+                // 4. Preparar detalles como DataTable para sp_RegistrarVentaFiscal
+                DataTable dtDetalles = new DataTable();
+                dtDetalles.Columns.Add("IdProducto", typeof(int));
+                dtDetalles.Columns.Add("PrecioCosto", typeof(decimal));
+                dtDetalles.Columns.Add("PrecioVenta", typeof(decimal));
+                dtDetalles.Columns.Add("Cantidad", typeof(int));
+                dtDetalles.Columns.Add("PorcentajeIVA", typeof(decimal));
+                dtDetalles.Columns.Add("ImporteIVA", typeof(decimal));
+                dtDetalles.Columns.Add("PorcentajeDescuento", typeof(decimal));
+                dtDetalles.Columns.Add("ImporteDescuento", typeof(decimal));
+                dtDetalles.Columns.Add("SubTotal", typeof(decimal));
+                dtDetalles.Columns.Add("IdListaPrecio", typeof(int));
+                dtDetalles.Columns.Add("Observaciones", typeof(string));
+                
+                foreach (DataGridViewRow row in dgvProductos.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    if (row.Cells["IdProducto"].Value == null) continue;
+
+                    int IdProducto = Convert.ToInt32(row.Cells["IdProducto"].Value);
+                    decimal precio = Convert.ToDecimal(row.Cells["Precio"].Value);
+                    decimal unidades = Convert.ToDecimal(row.Cells["Unidades"].Value);
+                    decimal descPorcentaje = Convert.ToDecimal(row.Cells["DescuentoPorcentaje"].Value ?? 0);
+                    decimal totalItem = Convert.ToDecimal(row.Cells["Total"].Value);
+
+                    // Calcular importes según AFIP
+                    decimal subtotalItem = precio * unidades;
+                    decimal importeDescuento = subtotalItem * (descPorcentaje / 100);
+                    decimal subtotalConDescuento = subtotalItem - importeDescuento;
+                    
+                    // IVA: 21% para Facturas, 0% para Remitos
+                    decimal porcentajeIVA = (_TipoComprobanteSeleccionado.Codigo != "R") ? 21 : 0;
+                    decimal importeIVA = subtotalConDescuento * (porcentajeIVA / 100);
+
+                    // TODO: Obtener precio de costo real del producto
+                    decimal precioCosto = 0; // Por ahora en 0, debería venir de la BD
+
+                    dtDetalles.Rows.Add(
+                        IdProducto,
+                        precioCosto,
+                        precio,
+                        Convert.ToInt32(unidades),
+                        porcentajeIVA,
+                        importeIVA,
+                        descPorcentaje,
+                        importeDescuento,
+                        totalItem,
+                        _IdListaPrecioActual,
+                        DBNull.Value // Observaciones
+                    );
+                }
+
+                // 5. Guardar en BD usando RegistrarVentaFiscal
+                string mensaje = string.Empty;
+                int idVentaGenerado = 0;
+                bool resultado = new CN_Venta().RegistrarVentaFiscal(oVenta, dtDetalles, out idVentaGenerado, out mensaje);
+
+                if (resultado)
+                {
+                    MostrarExito($"Venta registrada correctamente\n\n" +
+                               $"ID Venta: {idVentaGenerado}\n" +
+                               $"Tipo: {_TipoComprobanteSeleccionado.Descripcion}\n" +
+                               $"Número: {txtNumeroDocumento.Text}\n" +
+                               $"Total: ${total:N2}");
+                    
+                    // Generar PDF del comprobante
+                    try
+                    {
+                        // Obtener la venta completa para el PDF
+                        Venta ventaCompleta = new CN_Venta().ObtenerVentaCompleta(
+                            txtNumeroDocumento.Text, 
+                            Convert.ToInt32(((OpcionCombo)cboPuntoVenta.SelectedItem).Valor),
+                            _TipoComprobanteSeleccionado.IdTipoComprobante
+                        );
+
+                        if (ventaCompleta != null && ventaCompleta.IdVenta > 0)
+                        {
+                            var generador = new Reportes.GeneradorComprobantesFiscales();
+                            
+                            DialogResult respuesta = MessageBox.Show(
+                                "¿Desea generar el comprobante en PDF?",
+                                "Generar Comprobante",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question
+                            );
+
+                            if (respuesta == DialogResult.Yes)
+                            {
+                                string rutaPDF = generador.GuardarYAbrir(ventaCompleta);
+                                MessageBox.Show($"Comprobante generado:\n{rutaPDF}", 
+                                    "PDF Generado", 
+                                    MessageBoxButtons.OK, 
+                                    MessageBoxIcon.Information);
+                            }
+                        }
+                    }
+                    catch (Exception exPDF)
+                    {
+                        MessageBox.Show($"La venta se guardó correctamente, pero hubo un error al generar el PDF:\n{exPDF.Message}",
+                            "Advertencia",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                    
+                    LimpiarFormulario();
+                }
+                else
+                {
+                    MostrarError("Error al guardar la venta:\n" + mensaje);
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError("Error al procesar la venta:\n" + ex.Message);
+            }
+        }
+
+        private bool ValidarVenta(out string mensaje)
+        {
+            mensaje = string.Empty;
+
+            // 1. Validar cliente
+            if (_ClienteSeleccionado == null)
+            {
+                mensaje = "Debe seleccionar un cliente antes de guardar la venta.";
+                txtIdCliente.Focus();
+                return false;
+            }
+
+            // 2. Validar que hay productos
+            int cantidadProductos = 0;
+            foreach (DataGridViewRow row in dgvProductos.Rows)
+            {
+                // ✅ IGNORAR filas vacías (sin producto)
+                if (row.Cells["IdProducto"].Value != null && 
+                    !string.IsNullOrWhiteSpace(row.Cells["IdProducto"].Value.ToString()))
+                {
+                    cantidadProductos++;
+                }
+            }
+
+            if (cantidadProductos == 0)
+            {
+                mensaje = "Debe agregar al menos un producto a la venta.";
+                dgvProductos.Focus();
+                return false;
+            }
+
+            // 3. Validar cantidades y descuentos
+            foreach (DataGridViewRow row in dgvProductos.Rows)
+            {
+                // ✅ IGNORAR filas vacías (sin producto)
+                if (row.Cells["IdProducto"].Value == null || 
+                    string.IsNullOrWhiteSpace(row.Cells["IdProducto"].Value.ToString()))
+                {
+                    continue;
+                }
+
+                string producto = row.Cells["Producto"].Value?.ToString() ?? "";
+
+                // Validar cantidad
+                decimal cantidad = 0;
+                if (!decimal.TryParse(row.Cells["Unidades"].Value?.ToString(), out cantidad) || cantidad <= 0)
+                {
+                    mensaje = $"La cantidad del producto '{producto}' debe ser mayor a 0.";
+                    dgvProductos.CurrentCell = row.Cells["Unidades"];
+                    dgvProductos.BeginEdit(true);
+                    return false;
+                }
+
+                // Validar descuento
+                decimal descuento = 0;
+                decimal.TryParse(row.Cells["DescuentoPorcentaje"].Value?.ToString(), out descuento);
+                
+                if (descuento < 0 || descuento > 100)
+                {
+                    mensaje = $"El descuento del producto '{producto}' debe estar entre 0% y 100%.";
+                    dgvProductos.CurrentCell = row.Cells["DescuentoPorcentaje"];
+                    dgvProductos.BeginEdit(true);
+                    return false;
+                }
+            }
+
+            // 4. Validar forma de pago
+            if (cboFormaPago.SelectedIndex == -1)
+            {
+                mensaje = "Debe seleccionar una forma de pago.";
+                cboFormaPago.Focus();
+                return false;
+            }
+
+            // ✅ ELIMINADO: No validar "Paga con" - es opcional
+            // El usuario puede guardar sin completar este campo
+
+            // 5. Validar total
+            decimal totalVenta = 0;
+            decimal.TryParse(lblTotal.Text, out totalVenta);
+
+            if (totalVenta <= 0)
+            {
+                mensaje = "El total de la venta debe ser mayor a 0.";
+                return false;
+            }
+
+            return true;
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -534,18 +877,31 @@ namespace CapaPresentacion.Net8
 
         private void LimpiarFormulario()
         {
+            // Cliente
             txtIdCliente.Text = "";
             txtNombreCliente.Text = "";
             txtCondicionIVA.Text = "";
             _ClienteSeleccionado = null;
 
+            // Grid
             dgvProductos.Rows.Clear();
             AgregarFilaVacia();
 
+            // Totales
+            lblSubtotal.Text = "0.00";
+            lblDescuento.Text = "0.00";
+            lblIVA.Text = "0.00";
+            lblTotal.Text = "0.00";
+
+            // Pago
             txtPagaCon.Text = "0";
             txtCambio.Text = "0";
 
-            CalcularTotalesGenerales();
+            // Actualizar número de documento para próxima venta
+            ActualizarNumeroDocumento();
+
+            // Foco en cliente
+            txtIdCliente.Focus();
         }
     }
 }

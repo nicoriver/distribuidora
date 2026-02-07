@@ -35,12 +35,12 @@ namespace CapaNegocio
         //{
         //    return objcd_venta.ObtenerCorrelativoPorTipo(idTipoComprobante, puntoVenta);
         //}
-        public Venta ObtenerVentaCompleta(string numeroDocumento)
+        public Venta ObtenerVentaCompleta(string numeroDocumento, int ptoventa, int idtipocomprobante)
         {
             try
             {
                 // Obtener venta
-                Venta venta = new CD_Venta().ObtenerVentaCompleta(numeroDocumento);
+                Venta venta = new CD_Venta().ObtenerVentaCompleta(numeroDocumento, ptoventa, idtipocomprobante);
 
                 if (venta == null || venta.IdVenta == 0)
                     return null;
@@ -87,7 +87,18 @@ namespace CapaNegocio
 
             return oVenta;
         }
+        public Venta ObtenerVentaxid(int IdVenta)
+        {
+            Venta oVenta = objcd_venta.ObtenerVentaxid(IdVenta);
 
+            if (oVenta.IdVenta != 0)
+            {
+                List<Detalle_Venta> oDetalleVenta = objcd_venta.ObtenerDetalleVenta(oVenta.IdVenta);
+                oVenta.oDetalle_Venta = oDetalleVenta;
+            }
+
+            return oVenta;
+        }
 
         // =============================================
         // Métodos para Ventas Fiscales
